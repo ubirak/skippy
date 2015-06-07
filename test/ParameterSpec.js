@@ -1,10 +1,10 @@
 'use strict';
 
 var expect = require('chai').expect;
-var Parameter = require('./../../src/Parameter');
+var Parameter = require('./../src/Parameter');
 
 
-describe('Parameter', function() {
+describe('A Parameter', function() {
     it('should have name and a value', function() {
         var parameter = new Parameter('foo', 'bar');
 

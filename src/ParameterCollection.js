@@ -4,21 +4,17 @@ var _ = require('lodash');
 var Parameter = require('./Parameter');
 
 /**
+ * @param {Array.<Parameter>} parameters
  * @constructor
  */
-var ParameterCollection = function ParameterCollection() {
-    var parameters = [];
+var ParameterCollection = function ParameterCollection(parameters) {
+    var parameters = parameters || [];
 
-    /**
-     * @param {Parameter} parameter
-     */
-    this.addParameter = function (parameter) {
-        if (!parameter instanceof Parameter) {
-            throw new Error('Wrong parameter type.');
+    parameters.map(function (parameter, index) {
+        if (!(parameter instanceof Parameter)) {
+            throw new Error('Wrong parameter type at position: ' + (index + 1));
         }
-
-        parameters.push(parameter);
-    };
+    });
 
     /**
      * @param {String} name

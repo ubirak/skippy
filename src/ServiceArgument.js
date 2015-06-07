@@ -35,11 +35,11 @@ var ServiceArgument = function ServiceArguments(value) {
      */
     this._detectParameterType = function _detectParameterType(value) {
         if (this._isVariableReference(value)) {
-            return ServiceArguments.TYPE_VARIABLE_REFERENCE;
+            return ServiceArguments.TYPE_PARAMETER_REFERENCE;
         } else if (this._isServiceReference(value)) {
             return ServiceArguments.TYPE_SERVICE_REFERENCE;
         } else {
-            return ServiceArguments.TYPE_PRIMITIVE;
+            return ServiceArguments.TYPE_VALUE;
         }
     };
 
@@ -66,7 +66,7 @@ var ServiceArgument = function ServiceArguments(value) {
      * @returns {*}
      */
     this.getValue = function (container) {
-        if (ServiceArgument.TYPE_VARIABLE_REFERENCE === type) {
+        if (ServiceArgument.TYPE_PARAMETER_REFERENCE === type) {
             return container.getParameter(this._extractReferencedParameterName(value));
         } else if (ServiceArgument.TYPE_SERVICE_REFERENCE === type) {
             return container.getService(this._extractReferencedServiceName(value));
@@ -76,8 +76,8 @@ var ServiceArgument = function ServiceArguments(value) {
     };
 };
 
-ServiceArgument.TYPE_VARIABLE_REFERENCE = 'variable-reference';
+ServiceArgument.TYPE_PARAMETER_REFERENCE = 'variable-reference';
 ServiceArgument.TYPE_SERVICE_REFERENCE = 'service-reference';
-ServiceArgument.TYPE_PRIMITIVE = 'primitive';
+ServiceArgument.TYPE_VALUE = 'value';
 
 module.exports = ServiceArgument;

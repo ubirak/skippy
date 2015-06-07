@@ -10,21 +10,21 @@ var ParameterCollection = require('./ParameterCollection');
  */
 var Container = function Container(configurations) {
     var serviceDefinitions = [];
-    var parameterCollection = new ParameterCollection();
 
-    _.each(configurations.parameters, function (value, key) {
-        if (parameterCollection.hasParameter(key)) {
-            throw new Error('Duplicate parameter name: "' + key + '".');
-        }
+    var parameters = [];
+    if (configurations.parameters) {
+        parameters = configurations.parameters.map(function (value, key) {
+            return new Parameter(key, value);
+        });
+    }
 
-        parameterCollection.addParameter(new Parameter(key, value));
-    });
+    var parameterCollection = new ParameterCollection(parameters);
 
     /**
      * @param {String} name
      * @returns {*|null}
      */
-    this.getParameter = function(name) {
+    this.getParameter = function (name) {
         return parameterCollection.getParameter(name);
     };
 
@@ -32,7 +32,7 @@ var Container = function Container(configurations) {
      * @param name
      * @return {*}
      */
-    this.getService = function(name) {
+    this.getService = function (name) {
         //TODO
     };
 };
