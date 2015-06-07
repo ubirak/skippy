@@ -1,0 +1,22 @@
+{
+  "name": "skippy",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "gogs@enclume.glados.srv.forgebinaire.net:spy-seth/skippy.git"
+  },
+  "author": "Armand Abric <armand@forgebinaire.net>",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "~3.0.0",
+    "mocha": "~2.2.5"
+  },
+  "dependencies": {
+    "lodash": "~3.9.3"
+  }
+}
