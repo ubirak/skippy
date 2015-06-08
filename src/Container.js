@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var Parameter = require('./Parameter');
 var ParameterCollection = require('./ParameterCollection');
 

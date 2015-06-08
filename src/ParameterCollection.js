@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var Parameter = require('./Parameter');
 
 /**
@@ -21,11 +20,12 @@ var ParameterCollection = function ParameterCollection(parameters) {
      * @returns {*|null}
      */
     this.getParameter = function (name) {
-        var param = _.find(parameters, function (parameter) {
-            return name === parameter.getName();
+        var param = parameters.map(function (parameter) {
+            if (name === parameter.getName())
+                return parameter;
         });
 
-        return param || null;
+        return param.shift() || null;
     };
 
     /**
