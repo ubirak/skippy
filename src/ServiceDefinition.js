@@ -2,6 +2,7 @@
 
 var Container = require('./Container');
 var ServiceArgument = require('./ServiceArgument');
+var ServiceArgumentCollection = require('./ServiceArgumentCollection');
 
 /**
  * @param {String} name
@@ -13,7 +14,9 @@ var ServiceArgument = require('./ServiceArgument');
 var ServiceDefinition = function ServiceDefinition(name, constructor, args, isSingleton) {
     var name = name;
     var constructor = constructor;
-    var serviceArguments = args;
+    var serviceArgumentCollection = new ServiceArgumentCollection(args.map(function(argumentValue) {
+        return new ServiceArgument(argumentValue);
+    }));
     var isSingleton = isSingleton || true;
 
     /**
@@ -35,7 +38,7 @@ var ServiceDefinition = function ServiceDefinition(name, constructor, args, isSi
      * @private
      */
     this._buildArguments = function (container) {
-        return serviceArguments.map(function (argument) {
+        return serviceArgumentCollection.getArguments().map(function (argument) {
             return argument.getValue(container);
         });
     };

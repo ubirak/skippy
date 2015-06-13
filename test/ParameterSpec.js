@@ -3,8 +3,7 @@
 var expect = require('chai').expect;
 var Parameter = require('./../src/Parameter');
 
-
-describe('A Parameter', function() {
+describe('Parameter', function() {
     it('should have name and a value', function() {
         var parameter = new Parameter('foo', 'bar');
 

@@ -1,31 +1,33 @@
 'use strict';
 
+var Map = require('immutable').Map;
 var Parameter = require('./Parameter');
 
 /**
- * @param {Array.<Parameter>} parameters
+ * @param {Array.<Parameter>} parameterMap
  * @constructor
  */
-var ParameterCollection = function ParameterCollection(parameters) {
-    var parameters = parameters || [];
+var ParameterCollection = function ParameterCollection(parameterMap) {
+    var parameterMap = parameterMap || new Map();
 
-    parameters.map(function (parameter, index) {
+    if (!Map.isMap(parameterMap)) {
+        throw new Error('Wrong type of map');
+    }
+
+    parameterMap.forEach(function (parameter, key) {
         if (!(parameter instanceof Parameter)) {
-            throw new Error('Wrong parameter type at position: ' + (index + 1));
+            throw new Error('Wrong parameter type at position: "' + key + '".');
         }
     });
 
     /**
      * @param {String} name
-     * @returns {*|null}
+     * @returns {Parameter|undefined}
      */
     this.getParameter = function (name) {
-        var param = parameters.map(function (parameter) {
-            if (name === parameter.getName())
-                return parameter;
+        return parameterMap.find(function (parameter) {
+            return (name === parameter.getName());
         });
-
-        return param.shift() || null;
     };
 
     /**
@@ -33,7 +35,7 @@ var ParameterCollection = function ParameterCollection(parameters) {
      * @returns {boolean}
      */
     this.hasParameter = function (name) {
-        return (this.getParameter(name) ? true : false)
+        return (undefined !== this.getParameter(name));
     };
 };
 

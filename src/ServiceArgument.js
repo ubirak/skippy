@@ -7,16 +7,27 @@ var Container = require('./Container');
  * @constructor
  */
 var ServiceArgument = function ServiceArguments(value) {
-    var type = this._detectParameterType(value);
-    var value = value;
 
+    this._isString = function (value) {
+        if ((typeof value).toLowerCase() === "string") {
+            return false;
+        }
+
+        return true;
+    };
     /**
      * @param {*} value
      * @returns {boolean}
      * @private
      */
     this._isVariableReference = function (value) {
-        return true;
+        if (!this._isString(value)) {
+            return false;
+        }
+
+        var variableReferenceRegex = /%([^\s]*)%/i;
+
+        return variableReferenceRegex.test(value);
     };
 
     /**
@@ -25,7 +36,13 @@ var ServiceArgument = function ServiceArguments(value) {
      * @private
      */
     this._isServiceReference = function (value) {
-        return true;
+        if (!this._isString(value)) {
+            return false;
+        }
+
+        var serviceReferenceRegex = /@([^\s]*)/i;
+
+        return serviceReferenceRegex.test(value);
     };
 
     /**
@@ -74,6 +91,9 @@ var ServiceArgument = function ServiceArguments(value) {
 
         return value;
     };
+
+    var type = this._detectParameterType(value);
+    var value = value;
 };
 
 ServiceArgument.TYPE_PARAMETER_REFERENCE = 'variable-reference';
