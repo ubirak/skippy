@@ -39,7 +39,7 @@ var ServiceDefinition = function ServiceDefinition(name, constructor, args, isSi
      */
     this._buildArguments = function (container) {
         return serviceArgumentCollection.getArguments().map(function (argument) {
-            return argument.getValue(container);
+            return argument.resolve(container);
         });
     };
 };

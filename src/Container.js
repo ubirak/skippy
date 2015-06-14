@@ -44,7 +44,9 @@ var Container = function Container(servicesConfiguration, parametersConfiguratio
      * @returns {*|null}
      */
     this.getParameter = function (name) {
-        return parameterCollection.getParameter(name);
+        var parameter = parameterCollection.getParameter(name);
+
+        return parameter.getValue();
     };
 
     /**

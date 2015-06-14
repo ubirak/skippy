@@ -6,21 +6,21 @@
  * @constructor
  */
 var Parameter = function Parameter(name, value) {
-    var name = name;
-    var value = value;
+    this.name = name;
+    this.value = value;
 
     /**
      * @returns {String}
      */
     this.getName = function() {
-        return name;
+        return this.name;
     };
 
     /**
      * @returns {*}
      */
     this.getValue = function() {
-        return value;
+        return this.value;
     }
 };
 

@@ -7,20 +7,28 @@ var Container = require('./Container');
  * @constructor
  */
 var ServiceArgument = function ServiceArguments(value) {
+    // Filled at the end of the file.
+    var type = null;
+    var name = null;
 
+    /**
+     * @param {*} value
+     * @returns {boolean}
+     */
     this._isString = function (value) {
-        if ((typeof value).toLowerCase() === "string") {
+        if ((typeof value).toLowerCase() !== "string") {
             return false;
         }
 
         return true;
     };
+
     /**
      * @param {*} value
      * @returns {boolean}
      * @private
      */
-    this._isVariableReference = function (value) {
+    this._isParameterReference = function (value) {
         if (!this._isString(value)) {
             return false;
         }
@@ -50,14 +58,14 @@ var ServiceArgument = function ServiceArguments(value) {
      * @returns {String}
      * @private
      */
-    this._detectParameterType = function _detectParameterType(value) {
-        if (this._isVariableReference(value)) {
+    this._detectType = function _detectParameterType(value) {
+        if (this._isParameterReference(value)) {
             return ServiceArguments.TYPE_PARAMETER_REFERENCE;
         } else if (this._isServiceReference(value)) {
             return ServiceArguments.TYPE_SERVICE_REFERENCE;
-        } else {
-            return ServiceArguments.TYPE_VALUE;
         }
+
+        return ServiceArguments.TYPE_VALUE;
     };
 
     /**
@@ -66,7 +74,7 @@ var ServiceArgument = function ServiceArguments(value) {
      * @private
      */
     this._extractReferencedParameterName = function (name) {
-        return name.substr(1, (name.length - 2))
+        return name.substr(1, (name.length - 2));
     };
 
     /**
@@ -79,10 +87,17 @@ var ServiceArgument = function ServiceArguments(value) {
     };
 
     /**
+     * @returns {*}
+     */
+    this.getValue = function () {
+        return value;
+    };
+
+    /**
      * @param {Container} container
      * @returns {*}
      */
-    this.getValue = function (container) {
+    this.resolve = function (container) {
         if (ServiceArgument.TYPE_PARAMETER_REFERENCE === type) {
             return container.getParameter(this._extractReferencedParameterName(value));
         } else if (ServiceArgument.TYPE_SERVICE_REFERENCE === type) {
@@ -92,12 +107,12 @@ var ServiceArgument = function ServiceArguments(value) {
         return value;
     };
 
-    var type = this._detectParameterType(value);
-    var value = value;
+    type = this._detectType(value);
+    value = value;
 };
 
-ServiceArgument.TYPE_PARAMETER_REFERENCE = 'variable-reference';
+ServiceArgument.TYPE_PARAMETER_REFERENCE = 'parameter-reference';
 ServiceArgument.TYPE_SERVICE_REFERENCE = 'service-reference';
-ServiceArgument.TYPE_VALUE = 'value';
+ServiceArgument.TYPE_VALUE = 'simple-value';
 
 module.exports = ServiceArgument;
