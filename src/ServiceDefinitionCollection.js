@@ -4,11 +4,11 @@ var List = require('immutable').List;
 var ServiceDefinition = require('./ServiceDefinition');
 
 /**
- * @param {List.<ServiceDefinition>} serviceDefinitionList
+ * @param {Array.<ServiceDefinition>} serviceDefinitions
  * @constructor
  */
-var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDefinitionList) {
-    var serviceDefinitionList = new List(serviceDefinitionList || []);
+var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDefinitions) {
+    var serviceDefinitionList = new List(serviceDefinitions || []);
 
     serviceDefinitionList.map(function (definition, index) {
         if (!(definition instanceof ServiceDefinition)) {

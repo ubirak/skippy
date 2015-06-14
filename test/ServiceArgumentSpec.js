@@ -20,7 +20,8 @@ describe('ServiceArgument', function () {
     it('should not resolve simple argument', function () {
         var serviceArgument = new ServiceArgument('foo');
 
-        var container = new Container([], {});
+        var container = Container.create([], {});
+
         sinon.stub(container, 'getParameter');
         sinon.stub(container, 'getService');
 
@@ -32,7 +33,7 @@ describe('ServiceArgument', function () {
     it('should resolve variable reference argument', function () {
         var serviceArgument = new ServiceArgument('%foo%');
 
-        var container = new Container([], {});
+        var container = Container.create([], {});
 
         sinon.stub(container, 'getParameter').returns(42);
         sinon.stub(container, 'getService');
@@ -44,11 +45,10 @@ describe('ServiceArgument', function () {
 
     it('should resolve service reference argument', function () {
         var serviceArgument = new ServiceArgument('@foo');
-
-        var container = new Container([], {});
-
         var serviceMock = function() {
         };
+
+        var container = Container.create([], {});
 
         sinon.stub(container, 'getParameter');
         sinon.stub(container, 'getService').returns(serviceMock);

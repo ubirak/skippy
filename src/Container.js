@@ -46,7 +46,7 @@ var Container = function Container(serviceDefinitionCollection, parameterCollect
 };
 
 /**
- * @param services
+ * @param {Array} services
  * @returns {ServiceDefinitionCollection}
  * @private
  */
@@ -54,11 +54,7 @@ Container._initServiceDefinitionCollection = function (services) {
     var servicesConfigurationList = new List(services);
 
     var servicesDefinitionList = servicesConfigurationList.map(function (value) {
-        if (!value["arguments"]) {
-            value["arguments"] = [];
-        }
-
-        var argumentConfigurationList = new List(value["arguments"]);
+        var argumentConfigurationList = new List(value["arguments"] || []);
         var serviceArgumentList = argumentConfigurationList.map(function (value) {
             return new ServiceArgument(value);
         });
@@ -71,11 +67,11 @@ Container._initServiceDefinitionCollection = function (services) {
         );
     });
 
-    return new ServiceDefinitionCollection(servicesDefinitionList);
+    return new ServiceDefinitionCollection(servicesDefinitionList.toArray());
 };
 
 /**
- * @param parameters
+ * @param {Object} parameters
  * @returns {ParameterCollection}
  * @private
  */
@@ -98,10 +94,15 @@ Container.create = function (services, parameters) {
     services = services || [];
     parameters = parameters || {};
 
-    var serviceDefinitionCollection = this._initServiceDefinitionCollection(services);
-    var parameterCollection = this._initParameterCollection(parameters);
+    var serviceDefinitionCollection = Container._initServiceDefinitionCollection(services);
+    var parameterCollection = Container._initParameterCollection(parameters);
 
     return new Container(serviceDefinitionCollection, parameterCollection);
 };
 
-module.exports = Container;
+/**
+ * @type {{create: Container.create}}
+ */
+module.exports = {
+    create: Container.create
+};

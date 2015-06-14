@@ -4,11 +4,11 @@ var List = require('immutable').List;
 var ServiceArgument = require('./ServiceArgument');
 
 /**
- * @param {Array.<ServiceArgument>} parameters
+ * @param {Array.<ServiceArgument>} serviceArguments
  * @constructor
  */
-var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArgumentList) {
-    var serviceArgumentList = new List(serviceArgumentList || []);
+var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArguments) {
+    var serviceArgumentList = new List(serviceArguments || []);
 
     serviceArgumentList.map(function (argument, index) {
         if (!(argument instanceof ServiceArgument)) {
@@ -17,7 +17,7 @@ var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArgume
     });
 
     /**
-     * @returns {List.<ServiceArgument>}
+     * @returns {Array.<ServiceArgument>}
      */
     this.getArguments = function () {
         return serviceArgumentList.toArray();
