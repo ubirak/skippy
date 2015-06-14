@@ -10,34 +10,16 @@ var ServiceDefinition = require('./ServiceDefinition');
 var ServiceDefinitionCollection = require('./ServiceDefinitionCollection');
 
 /**
- * @param {[]} servicesConfiguration
- * @param {{}} parametersConfiguration
+ * Use Container.create(...) to create a new container instance.
+ *
+ * @param {ServiceDefinitionCollection} serviceDefinitionCollection
+ * @param {ParameterCollection} parameterCollection
+ * @private
  * @constructor
  */
-var Container = function Container(servicesConfiguration, parametersConfiguration) {
-    var servicesConfigurationList = new List(servicesConfiguration || []);
-    var parametersConfigurationMap = new Map(parametersConfiguration || {});
-
-    var serviceDefinitionCollection = new ServiceDefinitionCollection(servicesConfigurationList.map(function (value) {
-        if (!value["arguments"]) {
-            value["arguments"] = [];
-        }
-
-        var argumentList = new List(value["arguments"]);
-
-        return new ServiceDefinition(
-            value.name,
-            value.service,
-            new ServiceArgumentCollection(argumentList.map(function (value) {
-                return new ServiceArgument(value);
-            })),
-            value.singleton || undefined
-        );
-    }));
-
-    var parameterCollection = new ParameterCollection(parametersConfigurationMap.map(function (value, key) {
-        return new Parameter(key, value);
-    }));
+var Container = function Container(serviceDefinitionCollection, parameterCollection) {
+    var serviceDefinitionCollection = serviceDefinitionCollection;
+    var parameterCollection = parameterCollection;
 
     /**
      * @param {String} name
@@ -61,6 +43,65 @@ var Container = function Container(servicesConfiguration, parametersConfiguratio
         var serviceDefinition = serviceDefinitionCollection.getServiceDefinition(name);
         return serviceDefinition.createInstance(this);
     };
+};
+
+/**
+ * @param services
+ * @returns {ServiceDefinitionCollection}
+ * @private
+ */
+Container._initServiceDefinitionCollection = function (services) {
+    var servicesConfigurationList = new List(services);
+
+    var servicesDefinitionList = servicesConfigurationList.map(function (value) {
+        if (!value["arguments"]) {
+            value["arguments"] = [];
+        }
+
+        var argumentConfigurationList = new List(value["arguments"]);
+        var serviceArgumentList = argumentConfigurationList.map(function (value) {
+            return new ServiceArgument(value);
+        });
+
+        return new ServiceDefinition(
+            value.name,
+            value.service,
+            new ServiceArgumentCollection(serviceArgumentList.toArray()),
+            value.singleton || undefined
+        );
+    });
+
+    return new ServiceDefinitionCollection(servicesDefinitionList);
+};
+
+/**
+ * @param parameters
+ * @returns {ParameterCollection}
+ * @private
+ */
+Container._initParameterCollection = function (parameters) {
+    var parametersConfigurationMap = new Map(parameters);
+
+    var parameterMap = parametersConfigurationMap.map(function (value, key) {
+        return new Parameter(key, value);
+    });
+
+    return new ParameterCollection(parameterMap.toArray());
+};
+
+/**
+ * @param {Array.<{name: String, service: Function, arguments: Array.<String|*>}>} services
+ * @param {{String: *}} parameters
+ * @returns {Container}
+ */
+Container.create = function (services, parameters) {
+    services = services || [];
+    parameters = parameters || {};
+
+    var serviceDefinitionCollection = this._initServiceDefinitionCollection(services);
+    var parameterCollection = this._initParameterCollection(parameters);
+
+    return new Container(serviceDefinitionCollection, parameterCollection);
 };
 
 module.exports = Container;

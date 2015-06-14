@@ -8,7 +8,7 @@ var ServiceArgument = require('./ServiceArgument');
  * @constructor
  */
 var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArgumentList) {
-    var serviceArgumentList = serviceArgumentList || new List();
+    var serviceArgumentList = new List(serviceArgumentList || []);
 
     serviceArgumentList.map(function (argument, index) {
         if (!(argument instanceof ServiceArgument)) {
@@ -17,10 +17,10 @@ var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArgume
     });
 
     /**
-     * @returns {Array.<ServiceArgument>}
+     * @returns {List.<ServiceArgument>}
      */
     this.getArguments = function () {
-        return serviceArgumentList;
+        return serviceArgumentList.toArray();
     };
 };
 

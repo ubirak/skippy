@@ -8,7 +8,7 @@ var ServiceDefinition = require('./ServiceDefinition');
  * @constructor
  */
 var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDefinitionList) {
-    var serviceDefinitionList = serviceDefinitionList || new List();
+    var serviceDefinitionList = new List(serviceDefinitionList || []);
 
     serviceDefinitionList.map(function (definition, index) {
         if (!(definition instanceof ServiceDefinition)) {
