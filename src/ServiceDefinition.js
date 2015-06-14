@@ -1,5 +1,6 @@
 'use strict';
 
+var ObjectHelper = require('./ObjectHelper');
 var Container = require('./Container');
 var ServiceArgument = require('./ServiceArgument');
 var ServiceArgumentCollection = require('./ServiceArgumentCollection');
@@ -7,37 +8,42 @@ var ServiceArgumentCollection = require('./ServiceArgumentCollection');
 /**
  * @param {String} name
  * @param {Function} constructor
- * @param {Array.<ServiceArgument>} args
+ * @param {ServiceArgumentCollection} serviceArgumentCollection
  * @param {boolean} isSingleton
  * @constructor
  */
-var ServiceDefinition = function ServiceDefinition(name, constructor, args, isSingleton) {
+var ServiceDefinition = function ServiceDefinition(name, constructor, serviceArgumentCollection, isSingleton) {
     var name = name;
     var constructor = constructor;
-    var serviceArgumentCollection = new ServiceArgumentCollection(args.map(function(argumentValue) {
-        return new ServiceArgument(argumentValue);
-    }));
-    var isSingleton = isSingleton || true;
+    var serviceArgumentCollection = serviceArgumentCollection;
+    var isSingleton = !!isSingleton;
+
+    /**
+     * @returns {String}
+     */
+    this.getName = function () {
+        return name;
+    };
 
     /**
      * @returns {boolean}
      */
-    this.canHaveMultipleInstance = function () {
-        return !isSingleton;
+    this.isSingleton = function () {
+        return isSingleton;
     };
 
     /**
      * @param {Container} container
      */
     this.createInstance = function (container) {
-        return constructor.apply(constructor, this._buildArguments(container));
+        return ObjectHelper.createInstance(constructor, this._resolveArguments(serviceArgumentCollection, container));
     };
 
     /**
      * @param {Container} container
      * @private
      */
-    this._buildArguments = function (container) {
+    this._resolveArguments = function (serviceArgumentCollection, container) {
         return serviceArgumentCollection.getArguments().map(function (argument) {
             return argument.resolve(container);
         });

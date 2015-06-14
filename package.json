@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --colors --reporter=list --recursive test",
-    "bdd": "mocha --colors --reporter=min --watch --recursive test"
+    "bdd": "mocha --colors --reporter=dot --watch --recursive test"
   },
   "repository": {
     "type": "git",
