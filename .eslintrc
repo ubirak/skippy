@@ -1,0 +1,36 @@
+{
+    "env": {
+        "mocha": true,
+        "node": true
+    },
+    "rules": {
+        "no-shadow": 1,
+        "no-unused-vars": 1,
+        "valid-jsdoc": [
+            2,
+            {
+                "requireParamDescription": false,
+                "requireReturn": false,
+                "requireReturnDescription": false,
+                "prefer": {
+                    "returns": "return"
+                }
+            }
+        ],
+        "no-native-reassign": [
+            2,
+            {
+                "exceptions": ["Map"]
+            }
+        ],
+        "no-underscore-dangle": 0,
+        "quotes": [
+            2,
+            "single"
+        ],
+        "strict": [
+            2,
+            "global"
+        ]
+    }
+}
