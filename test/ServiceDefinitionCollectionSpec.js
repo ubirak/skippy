@@ -1,7 +1,12 @@
 'use strict';
 
+/* global describe */
+/* global it */
+
 var expect = require('chai').expect;
 var ServiceDefinitionCollection = require('./../src/ServiceDefinitionCollection');
 
-describe.skip('ServiceDefinitionCollection', function() {
+describe('ServiceDefinitionCollection', function() {
+    it.skip('todo', function() {
+    });
 });

@@ -1,7 +1,9 @@
 'use strict';
 
+/* global describe */
+/* global it */
+
 var expect = require('chai').expect;
-var Map = require('immutable').Map;
 var Parameter = require('./../src/Parameter');
 var ParameterCollection = require('./../src/ParameterCollection');
 

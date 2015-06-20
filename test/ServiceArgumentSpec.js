@@ -1,5 +1,8 @@
 'use strict';
 
+/* global describe */
+/* global it */
+
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var Container = require('./../src/Container');
