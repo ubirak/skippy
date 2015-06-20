@@ -8,6 +8,7 @@ var ServiceArgument = require('./ServiceArgument');
 var ServiceArgumentCollection = require('./ServiceArgumentCollection');
 var ServiceDefinition = require('./ServiceDefinition');
 var ServiceDefinitionCollection = require('./ServiceDefinitionCollection');
+var ServiceStorage = require('./ServiceStorage');
 
 /**
  * Use Container.create(...) to create a new container instance.
@@ -20,13 +21,18 @@ var ServiceDefinitionCollection = require('./ServiceDefinitionCollection');
 var Container = function Container(serviceDefinitionCollection, parameterCollection) {
     var serviceDefinitionCollection = serviceDefinitionCollection;
     var parameterCollection = parameterCollection;
+    var serviceStorage = new ServiceStorage();
 
     /**
      * @param {String} name
      * @returns {*|null}
      */
     this.getParameter = function (name) {
-        var parameter = parameterCollection.getParameter(name);
+        if (!this.parameterCollection.hasParameter(name)) {
+            throw new Error('Unknown parameter "' + name + '".');
+        }
+
+        var parameter = this.parameterCollection.getParameter(name);
 
         return parameter.getValue();
     };
@@ -36,11 +42,11 @@ var Container = function Container(serviceDefinitionCollection, parameterCollect
      * @return {*}
      */
     this.getService = function (name) {
-        if (!serviceDefinitionCollection.hasServiceDefinition(name)) {
-            throw new Error('Unknown service %s.')
+        if (!this.serviceDefinitionCollection.hasServiceDefinition(name)) {
+            throw new Error('Unknown service "' + name + '".')
         }
 
-        var serviceDefinition = serviceDefinitionCollection.getServiceDefinition(name);
+        var serviceDefinition = this.serviceDefinitionCollection.getServiceDefinition(name);
         return serviceDefinition.createInstance(this);
     };
 };
