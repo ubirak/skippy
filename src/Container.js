@@ -19,50 +19,58 @@ var ServiceStorage = require('./ServiceStorage');
  * @constructor
  */
 var Container = function Container(serviceDefinitionCollection, parameterCollection) {
-    var serviceDefinitionCollection = serviceDefinitionCollection;
-    var parameterCollection = parameterCollection;
     var serviceStorage = new ServiceStorage();
 
     /**
      * @param {String} name
-     * @returns {*|null}
+     * @return {*|null}
      */
     this.getParameter = function (name) {
-        if (!this.parameterCollection.hasParameter(name)) {
+        if (!parameterCollection.hasParameter(name)) {
             throw new Error('Unknown parameter "' + name + '".');
         }
 
-        var parameter = this.parameterCollection.getParameter(name);
+        var parameter = parameterCollection.getParameter(name);
 
         return parameter.getValue();
     };
 
     /**
-     * @param name
+     * @param {String} name
      * @return {*}
      */
     this.getService = function (name) {
-        if (!this.serviceDefinitionCollection.hasServiceDefinition(name)) {
-            throw new Error('Unknown service "' + name + '".')
+        if (!serviceDefinitionCollection.hasServiceDefinition(name)) {
+            throw new Error('Unknown service "' + name + '".');
         }
 
-        var serviceDefinition = this.serviceDefinitionCollection.getServiceDefinition(name);
-        return serviceDefinition.createInstance(this);
+        if (serviceStorage.hasInstance(name)) {
+            return serviceStorage.getInstance(name);
+        }
+
+        var serviceDefinition = serviceDefinitionCollection.getServiceDefinition(name);
+        var serviceInstance = serviceDefinition.createInstance(this);
+
+        if (serviceDefinition.isSingleton()) {
+            serviceStorage.addInstance(name, serviceInstance);
+        }
+
+        return serviceInstance;
     };
 };
 
 /**
  * @param {Array} services
- * @returns {ServiceDefinitionCollection}
+ * @return {ServiceDefinitionCollection}
  * @private
  */
 Container._initServiceDefinitionCollection = function (services) {
     var servicesConfigurationList = new List(services);
 
     var servicesDefinitionList = servicesConfigurationList.map(function (value) {
-        var argumentConfigurationList = new List(value["arguments"] || []);
-        var serviceArgumentList = argumentConfigurationList.map(function (value) {
-            return new ServiceArgument(value);
+        var argumentConfigurationList = new List(value.arguments || []);
+        var serviceArgumentList = argumentConfigurationList.map(function (argumentValue) {
+            return new ServiceArgument(argumentValue);
         });
 
         return new ServiceDefinition(
@@ -78,7 +86,7 @@ Container._initServiceDefinitionCollection = function (services) {
 
 /**
  * @param {Object} parameters
- * @returns {ParameterCollection}
+ * @return {ParameterCollection}
  * @private
  */
 Container._initParameterCollection = function (parameters) {
@@ -94,7 +102,7 @@ Container._initParameterCollection = function (parameters) {
 /**
  * @param {Array.<{name: String, service: Function, arguments: Array.<String|*>}>} services
  * @param {{String: *}} parameters
- * @returns {Container}
+ * @return {Container}
  */
 Container.create = function (services, parameters) {
     services = services || [];

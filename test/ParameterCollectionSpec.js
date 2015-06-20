@@ -48,7 +48,7 @@ describe('ParameterCollection', function () {
         var fooParameterB = new Parameter('foo', 51);
 
         expect(function () {
-            new ParameterCollection([fooParameterA, fooParameterB])
+            new ParameterCollection([fooParameterA, fooParameterB]);
         }).not.to.throw();
     });
 

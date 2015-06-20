@@ -17,7 +17,7 @@ var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArgume
     });
 
     /**
-     * @returns {Array.<ServiceArgument>}
+     * @return {Array.<ServiceArgument>}
      */
     this.getArguments = function () {
         return serviceArgumentList.toArray();

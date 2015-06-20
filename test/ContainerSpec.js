@@ -21,10 +21,10 @@ describe('Container', function () {
 
         it.skip('should return the service instance', function () {
         });
-        
+
         it.skip('should return the same service instance for singleton service', function () {
         });
-        
+
         it.skip('should not return the same service instance for non singleton service', function () {
         });
     });
