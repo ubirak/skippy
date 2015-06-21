@@ -18,5 +18,5 @@ dev:
     steps:
         - npm-install
         - internal/watch:
-            code: npm test
+            code: npm-test
             reload: true
