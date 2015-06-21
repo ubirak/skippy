@@ -2,4 +2,4 @@
 
 module.exports = {
     Container: require('./src/Container')
-}
+};

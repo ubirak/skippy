@@ -10,18 +10,18 @@ var Parameter = function Parameter(name, value) {
     this.value = value;
 
     /**
-     * @returns {String}
+     * @return {String}
      */
     this.getName = function() {
         return this.name;
     };
 
     /**
-     * @returns {*}
+     * @return {*}
      */
     this.getValue = function() {
         return this.value;
-    }
+    };
 };
 
 module.exports = Parameter;

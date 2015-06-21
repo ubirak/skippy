@@ -1,9 +1,13 @@
 'use strict';
 
+/**
+ * @class {ObjectHelper}
+ */
 var ObjectHelper = {
     /**
      * @param {Function} constructor
-     * @returns {*}
+     * @param {Array} newInstanceArguments
+     * @return {*}
      */
     createInstance: function (constructor, newInstanceArguments) {
         // From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply#Using_apply_to_chain_constructors

@@ -13,20 +13,17 @@ var ServiceArgumentCollection = require('./ServiceArgumentCollection');
  * @constructor
  */
 var ServiceDefinition = function ServiceDefinition(name, constructor, serviceArgumentCollection, isSingleton) {
-    var name = name;
-    var constructor = constructor;
-    var serviceArgumentCollection = serviceArgumentCollection;
-    var isSingleton = !!isSingleton;
+    isSingleton = !!isSingleton;
 
     /**
-     * @returns {String}
+     * @return {String}
      */
     this.getName = function () {
         return name;
     };
 
     /**
-     * @returns {boolean}
+     * @return {boolean}
      */
     this.isSingleton = function () {
         return isSingleton;
@@ -34,13 +31,16 @@ var ServiceDefinition = function ServiceDefinition(name, constructor, serviceArg
 
     /**
      * @param {Container} container
+     * @return {*}
      */
     this.createInstance = function (container) {
         return ObjectHelper.createInstance(constructor, this._resolveArguments(serviceArgumentCollection, container));
     };
 
     /**
+     * @param {ServiceArgumentCollection} serviceArgumentCollection
      * @param {Container} container
+     * @return {Array}
      * @private
      */
     this._resolveArguments = function (serviceArgumentCollection, container) {

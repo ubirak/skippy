@@ -9,6 +9,10 @@ build:
                 echo "npm version $(npm -v) running"
         - npm-install
         - npm-test
+        - script:
+            name: Check code lint
+            code: |
+                npm run lint
 
 dev:
     steps:

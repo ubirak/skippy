@@ -18,7 +18,7 @@ var ParameterCollection = function ParameterCollection(parameters) {
 
     /**
      * @param {String} name
-     * @returns {Parameter|undefined}
+     * @return {Parameter|undefined}
      */
     this.getParameter = function (name) {
         return parameterList.find(function (parameter) {
@@ -28,7 +28,7 @@ var ParameterCollection = function ParameterCollection(parameters) {
 
     /**
      * @param {String} name
-     * @returns {boolean}
+     * @return {boolean}
      */
     this.hasParameter = function (name) {
         return (undefined !== this.getParameter(name));

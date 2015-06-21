@@ -18,7 +18,7 @@ var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDe
 
     /**
      * @param {String} name
-     * @returns {ServiceDefinition|undefined}
+     * @return {ServiceDefinition|undefined}
      */
     this.getServiceDefinition = function (name) {
         return serviceDefinitionList.find(function(serviceDefinition) {
@@ -28,7 +28,7 @@ var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDe
 
     /**
      * @param {String} name
-     * @returns {boolean}
+     * @return {boolean}
      */
     this.hasServiceDefinition = function (name) {
         return (undefined !== this.getServiceDefinition(name));

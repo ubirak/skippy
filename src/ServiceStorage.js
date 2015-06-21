@@ -2,22 +2,21 @@
 
 /**
  * @todo
- * @constuctor
+ * @constructor
  */
 var ServiceStorage = function ServiceStorage() {
-	var localCache = {};
-	
-	this.hasInstance = function (name) {
-		// @todo
-	};
-	
-	this.addInstance = function (name, object) {
-		// @todo
-	};
-	
-	this.getInstance = function (name) {
-		// @todo	
-	};
+    this.hasInstance = function () {
+        // @todo
+        return false;
+    };
+
+    this.addInstance = function () {
+        // @todo
+    };
+
+    this.getInstance = function () {
+        // @todo
+    };
 };
 
 module.exports = ServiceStorage;

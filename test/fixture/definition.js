@@ -1,21 +1,23 @@
+'use strict';
+
 module.exports = {
-    "parameters": {
-        "api.key": 12345
+    'parameters': {
+        'api.key': 12345
     },
 
-    "services": [
+    'services': [
         {
-            "name": "common.foo.service",
-            "service": require("./FooService"),
-            "arguments": [
-                "@common.bar.service",
-                "%api.key%",
+            'name': 'common.foo.service',
+            'service': require('./FooService'),
+            'arguments': [
+                '@common.bar.service',
+                '%api.key%',
                 42
             ]
         },
         {
-            "name": "common.bar.service",
-            "service": require('./BarService')
+            'name': 'common.bar.service',
+            'service': require('./BarService')
         }
     ]
 };
