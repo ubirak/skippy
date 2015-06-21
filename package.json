@@ -1,7 +1,7 @@
 {
   "name": "skippy",
   "version": "0.0.1",
-  "description": "",
+  "description": "Simple and robust dependency container.",
   "main": "index.js",
   "scripts": {
     "test": "mocha --colors --reporter=list --recursive test",
