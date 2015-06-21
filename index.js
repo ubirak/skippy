@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-    Container: require('./src/Container')
+    ContainerFactory: require('./src/ContainerFactory')
 };

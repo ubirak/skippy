@@ -8,7 +8,7 @@ var sinon = require('sinon');
 var ServiceDefinition = require('./../src/ServiceDefinition');
 var ServiceArgument = require('./../src/ServiceArgument');
 var ServiceArgumentCollection = require('./../src/ServiceArgumentCollection');
-var Container = require('./../src/Container');
+var ContainerFactory = require('./../src/ContainerFactory');
 
 describe('ServiceDefinition', function () {
     var noop = function noop() {
@@ -33,7 +33,7 @@ describe('ServiceDefinition', function () {
     it('should create an instance of a service without arguments', function () {
         var serviceDefinition = new ServiceDefinition('foo', noop, emptyServiceArgument, false);
 
-        var container = Container.create([], {});
+        var container = ContainerFactory.create([], {});
         sinon.stub(container);
 
         expect(serviceDefinition.createInstance(container)).to.be.instanceOf(noop);
@@ -52,7 +52,7 @@ describe('ServiceDefinition', function () {
 
         var serviceDefinition = new ServiceDefinition('foo', serviceConstructor, serviceArgumentCollection, false);
 
-        var container = Container.create([], {});
+        var container = ContainerFactory.create([], {});
         sinon.stub(container);
 
         expect(serviceDefinition.createInstance(container)).to.be.instanceOf(serviceConstructor);
