@@ -12,7 +12,7 @@ var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArgume
 
     serviceArgumentList.map(function (argument, index) {
         if (!(argument instanceof ServiceArgument)) {
-            throw new Error('Wrong parameter type at position: ' + (index + 1));
+            throw new Error('Wrong parameter type at position: ' + (index));
         }
     });
 
