@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha --colors --reporter=list --recursive test",
     "bdd": "mocha --colors --reporter=dot --watch --recursive test",
-    "lint": "eslint --color ."
+    "lint": "eslint --color .",
+    "coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter=dot --recursive test "
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   "devDependencies": {
     "chai": "~3.0.0",
     "eslint": "~0.23.0",
+    "istanbul": "~0.3.15",
     "mocha": "~2.2.5",
     "sinon": "~1.15.3"
   },

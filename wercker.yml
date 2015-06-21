@@ -13,6 +13,10 @@ build:
             name: Check code lint
             code: |
                 npm run lint
+        - script:
+            name: Code coverage
+            code: |
+                npm run coverage
 
 dev:
     steps:

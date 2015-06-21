@@ -1,3 +1,9 @@
+# node
 node_modules
+
+# wercker continuous integration cli
 _builds
 _steps
+
+# istanbul code coverage
+coverage
