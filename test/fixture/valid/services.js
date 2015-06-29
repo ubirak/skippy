@@ -27,6 +27,14 @@ module.exports = {
                 42,
                 '@foo.serviceA'
             ]
+        },
+        {
+            'name': 'foo.serviceD',
+            'service': require('./ServiceD'),
+            'arguments': [
+                '@foo.serviceA',
+                '@foo.serviceB'
+            ]
         }
     ]
 };

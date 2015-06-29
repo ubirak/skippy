@@ -65,4 +65,26 @@ describe('Container', function () {
         expect(serviceC.bar).to.be.equal(42);
         expect(serviceC.serviceA).to.be.equal(serviceA);
     });
+
+    it('should reuse the singleton instance even to build other service', function () {
+        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
+
+        var serviceD = container.getService('foo.serviceD');
+        var serviceAFromServiceD = serviceD.serviceA;
+
+        var serviceA = container.getService('foo.serviceA');
+
+        expect(serviceAFromServiceD).to.be.equal(serviceA);
+    });
+
+    it('should not reuse non singleton instance to build other service', function () {
+        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
+
+        var serviceD = container.getService('foo.serviceD');
+        var serviceBFromServiceD = serviceD.serviceB;
+
+        var serviceB = container.getService('foo.serviceB');
+
+        expect(serviceBFromServiceD).to.not.be.equal(serviceB);
+    });
 });
