@@ -22,7 +22,7 @@ describe('ServiceDefinition', function () {
         expect(serviceDefinition.getName()).to.equal('foo');
     });
 
-    it('should inform if the service should be considered as a service', function () {
+    it('should inform if the service should be considered as a singleton', function () {
         var singletonService = new ServiceDefinition('foo', noop, emptyServiceArgument, false);
         expect(singletonService.isSingleton()).to.be.false;
 
