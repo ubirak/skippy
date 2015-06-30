@@ -22,6 +22,17 @@ var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArgume
     this.getArguments = function () {
         return serviceArgumentList.toArray();
     };
+
+    /**
+     * @return {Array.<ServiceArgument>}
+     */
+    this.getServiceArguments = function() {
+        var serviceReferenceArgumentList = serviceArgumentList.filter(function(argument) {
+            return argument.isServiceReference();
+        });
+
+        return serviceReferenceArgumentList.toArray();
+    };
 };
 
 module.exports = ServiceArgumentCollection;

@@ -87,10 +87,37 @@ var ServiceArgument = function ServiceArguments(value) {
     };
 
     /**
+     * @return {String}
+     */
+    this.getName = function () {
+        if (this.isParameterReference()) {
+            return this._extractReferencedParameterName(name);
+        } else if (this.isServiceReference()) {
+            return this._extractReferencedServiceName(name);
+        } else {
+            throw new Error('Simple value parameter do not have name.');
+        }
+    };
+
+    /**
      * @return {*}
      */
     this.getValue = function () {
         return value;
+    };
+
+    /**
+     * @return {Boolean}
+     */
+    this.isServiceReference = function () {
+        return (ServiceArgument.TYPE_SERVICE_REFERENCE === type);
+    };
+
+    /**
+     * @return {Boolean}
+     */
+    this.isParameterReference = function () {
+        return (ServiceArgument.TYPE_PARAMETER_REFERENCE === type);
     };
 
     /**
