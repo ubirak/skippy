@@ -22,20 +22,35 @@ describe('ServiceArgumentCollection', function () {
     });
 
     it('should return all the arguments', function () {
-        var serviceArguments = [
+        var argumentCollection = new ServiceArgumentCollection([
             new ServiceArgument('a'),
-            new ServiceArgument('b'),
-            new ServiceArgument('c')
-        ];
-
-        var argumentCollection = new ServiceArgumentCollection(serviceArguments);
+            new ServiceArgument('%b%'),
+            new ServiceArgument('@c')
+        ]);
 
         var returnedServiceArguments = argumentCollection.getArguments();
 
         expect(returnedServiceArguments).to.have.length(3);
 
         expect(returnedServiceArguments[0].getValue()).to.be.equal('a');
-        expect(returnedServiceArguments[1].getValue()).to.be.equal('b');
-        expect(returnedServiceArguments[2].getValue()).to.be.equal('c');
+        expect(returnedServiceArguments[1].getValue()).to.be.equal('%b%');
+        expect(returnedServiceArguments[2].getValue()).to.be.equal('@c');
+    });
+
+    it('should return only the service reference arguments', function () {
+        var argumentCollection = new ServiceArgumentCollection([
+            new ServiceArgument('a'),
+            new ServiceArgument('%b%'),
+            new ServiceArgument('@c'),
+            new ServiceArgument('@d'),
+            new ServiceArgument('%e%')
+        ]);
+
+        var returnedServiceArguments = argumentCollection.getServiceArguments();
+
+        expect(returnedServiceArguments).to.have.length(2);
+
+        expect(returnedServiceArguments[0].getValue()).to.be.equal('@c');
+        expect(returnedServiceArguments[1].getValue()).to.be.equal('@d');
     });
 });

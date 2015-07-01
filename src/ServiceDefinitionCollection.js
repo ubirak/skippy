@@ -12,7 +12,7 @@ var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDe
 
     serviceDefinitionList.map(function (definition, index) {
         if (!(definition instanceof ServiceDefinition)) {
-            throw new Error('Wrong parameter type at position: ' + (index + 1));
+            throw new Error('Wrong parameter type at position: ' + index);
         }
     });
 
@@ -38,8 +38,8 @@ var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDe
      * @param {Function} cb
      */
     this.forEach = function (cb) {
-        serviceDefinitionList.forEach(function (value) {
-            return cb(value);
+        serviceDefinitionList.forEach(function (serviceDefinition) {
+            return cb(serviceDefinition);
         });
     };
 };
