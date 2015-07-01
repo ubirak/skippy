@@ -2,6 +2,7 @@
   "name": "skippy",
   "version": "0.0.1",
   "description": "Simple and robust dependency container.",
+  "keywords": ["container", "dependency", "service", "injection", "dependency injection", "di"],
   "main": "index.js",
   "scripts": {
     "test": "mocha --colors --reporter=list --recursive test",
