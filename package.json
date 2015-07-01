@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "gogs@enclume.glados.srv.forgebinaire.net:spy-seth/skippy.git"
+    "url": "git@github.com:Spy-Seth/skippy.git"
   },
   "author": "Armand Abric <armand@forgebinaire.net>",
   "license": "MIT",
