@@ -12,7 +12,7 @@ var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDe
 
     serviceDefinitionList.map(function (definition, index) {
         if (!(definition instanceof ServiceDefinition)) {
-            throw new Error('Wrong parameter type at position: ' + (index + 1));
+            throw new Error('Wrong parameter type at position: ' + index);
         }
     });
 
@@ -21,17 +21,26 @@ var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDe
      * @return {ServiceDefinition|undefined}
      */
     this.getServiceDefinition = function (name) {
-        return serviceDefinitionList.find(function(serviceDefinition) {
+        return serviceDefinitionList.find(function (serviceDefinition) {
             return (serviceDefinition.getName() === name);
         });
     };
 
     /**
      * @param {String} name
-     * @return {boolean}
+     * @return {Boolean}
      */
     this.hasServiceDefinition = function (name) {
         return (undefined !== this.getServiceDefinition(name));
+    };
+
+    /**
+     * @param {Function} cb
+     */
+    this.forEach = function (cb) {
+        serviceDefinitionList.forEach(function (serviceDefinition) {
+            return cb(serviceDefinition);
+        });
     };
 };
 

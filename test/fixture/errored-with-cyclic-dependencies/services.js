@@ -17,6 +17,7 @@ module.exports = {
             'name': 'bar.service.C',
             'service': require('./ServiceC'),
             'arguments': [
+                '@bar.service.A',
                 '@bar.service.D'
             ]
         },

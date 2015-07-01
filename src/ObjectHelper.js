@@ -16,6 +16,14 @@ var ObjectHelper = {
         constructor.apply(proxyConstructor, newInstanceArguments);
 
         return proxyConstructor;
+    },
+
+    /**
+     * @param {*} object
+     * @return {*}
+     */
+    clone: function(object) {
+        return JSON.parse(JSON.stringify(object));
     }
 };
 

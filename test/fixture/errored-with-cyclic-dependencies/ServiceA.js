@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * A service with no dependency.
+ * This service is empty.
  *
  * @constructor
  */

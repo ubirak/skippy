@@ -4,25 +4,57 @@
 /* global it */
 
 var expect = require('chai').expect;
-var ContainerFactory = require('./../src/ContainerFactory');
-var servicesConf = require('./fixture/valid/services');
+var Container = require('./../src/Container');
+var Parameter = require('./../src/Parameter');
+var ParameterCollection = require('./../src/ParameterCollection');
+var ServiceArgument = require('./../src/ServiceArgument');
+var ServiceArgumentCollection = require('./../src/ServiceArgumentCollection');
+var ServiceDefinition = require('./../src/ServiceDefinition');
+var ServiceDefinitionCollection = require('./../src/ServiceDefinitionCollection');
+var servicesConfigurationValid = require('./fixture/valid/services');
 var ServiceA = require('./fixture/valid/ServiceA');
+var ServiceC = require('./fixture/valid/ServiceC');
 
 describe('Container', function () {
     it('should return the parameter value', function () {
-        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
+        var serviceDefinitionCollection = new ServiceDefinitionCollection();
+        var parameterCollection = new ParameterCollection([
+            new Parameter('foo', 'bar')
+        ]);
 
-        expect(container.getParameter('hello.world')).to.be.equal('Hello, I\'m a parameter!');
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
+
+        expect(container.getParameter('foo')).to.be.equal('bar');
     });
 
     it('should return the service instance', function () {
-        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
+        var serviceDefinitionA = new ServiceDefinition(
+            'foo.serviceA',
+            ServiceA,
+            new ServiceArgumentCollection(),
+            true
+        );
+
+        var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA]);
+        var parameterCollection = new ParameterCollection();
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
 
         expect(container.getService('foo.serviceA')).to.be.an.instanceof(ServiceA);
     });
 
     it('should return the same service instance for singleton service', function () {
-        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
+        var serviceDefinitionA = new ServiceDefinition(
+            'foo.serviceA',
+            ServiceA,
+            new ServiceArgumentCollection(),
+            true
+        );
+
+        var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA]);
+        var parameterCollection = new ParameterCollection();
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
 
         var firstCall = container.getService('foo.serviceA');
         var secondCall = container.getService('foo.serviceA');
@@ -31,16 +63,31 @@ describe('Container', function () {
     });
 
     it('should not return the same service instance for non singleton service', function () {
-        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
+        var serviceDefinitionA = new ServiceDefinition(
+            'foo.serviceA',
+            ServiceA,
+            new ServiceArgumentCollection(),
+            false
+        );
 
-        var firstCall = container.getService('foo.serviceB');
-        var secondCall = container.getService('foo.serviceB');
+        var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA]);
+        var parameterCollection = new ParameterCollection();
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
+
+        var firstCall = container.getService('foo.serviceA');
+        var secondCall = container.getService('foo.serviceA');
 
         expect(firstCall).to.not.be.equal(secondCall);
     });
 
     it('should throw an exception on undefined parameter', function () {
-        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
+        var serviceDefinitionCollection = new ServiceDefinitionCollection();
+
+        var parameter = new Parameter('foo', 'bar');
+        var parameterCollection = new ParameterCollection([parameter]);
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
 
         expect(function () {
             container.getParameter('i.do.not.exist');
@@ -48,7 +95,11 @@ describe('Container', function () {
     });
 
     it('should throw an exception on undefined service', function () {
-        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
+        var serviceDefinitionCollection = new ServiceDefinitionCollection();
+        var parameterCollection = new ParameterCollection();
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
+
 
         expect(function () {
             container.getService('i.do.not.exist');
@@ -56,35 +107,37 @@ describe('Container', function () {
     });
 
     it('should pass the right argument to the service', function () {
-        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
+        var serviceDefinitionA = new ServiceDefinition(
+            'foo.serviceA',
+            ServiceA,
+            new ServiceArgumentCollection(),
+            true
+        );
+
+        var serviceDefinitionC = new ServiceDefinition(
+            'foo.serviceC',
+            ServiceC,
+            new ServiceArgumentCollection([
+                new ServiceArgument('%foo%'),
+                new ServiceArgument(42),
+                new ServiceArgument('@foo.serviceA')
+            ]),
+            false
+        );
+
+        var parameterFoo = new Parameter('foo', 'Pwouet');
+
+        var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA, serviceDefinitionC]);
+        var parameterCollection = new ParameterCollection([parameterFoo]);
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
+
 
         var serviceA = container.getService('foo.serviceA');
         var serviceC = container.getService('foo.serviceC');
 
-        expect(serviceC.foo).to.be.equal('Hello, I\'m a parameter!');
+        expect(serviceC.foo).to.be.equal('Pwouet');
         expect(serviceC.bar).to.be.equal(42);
         expect(serviceC.serviceA).to.be.equal(serviceA);
-    });
-
-    it('should reuse the singleton instance even to build other service', function () {
-        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
-
-        var serviceD = container.getService('foo.serviceD');
-        var serviceAFromServiceD = serviceD.serviceA;
-
-        var serviceA = container.getService('foo.serviceA');
-
-        expect(serviceAFromServiceD).to.be.equal(serviceA);
-    });
-
-    it('should not reuse non singleton instance to build other service', function () {
-        var container = ContainerFactory.create(servicesConf.services, servicesConf.parameters);
-
-        var serviceD = container.getService('foo.serviceD');
-        var serviceBFromServiceD = serviceD.serviceB;
-
-        var serviceB = container.getService('foo.serviceB');
-
-        expect(serviceBFromServiceD).to.not.be.equal(serviceB);
     });
 });

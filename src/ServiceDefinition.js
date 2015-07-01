@@ -23,6 +23,13 @@ var ServiceDefinition = function ServiceDefinition(name, constructor, serviceArg
     };
 
     /**
+     * @return {ServiceArgumentCollection}
+     */
+    this.getArgumentCollection = function () {
+        return serviceArgumentCollection;
+    };
+
+    /**
      * @return {boolean}
      */
     this.isSingleton = function () {
@@ -34,16 +41,15 @@ var ServiceDefinition = function ServiceDefinition(name, constructor, serviceArg
      * @return {*}
      */
     this.createInstance = function (container) {
-        return ObjectHelper.createInstance(constructor, this._resolveArguments(serviceArgumentCollection, container));
+        return ObjectHelper.createInstance(constructor, this._resolveArguments(container));
     };
 
     /**
-     * @param {ServiceArgumentCollection} serviceArgumentCollection
      * @param {Container} container
      * @return {Array}
      * @private
      */
-    this._resolveArguments = function (serviceArgumentCollection, container) {
+    this._resolveArguments = function (container) {
         return serviceArgumentCollection.getArguments().map(function (argument) {
             return argument.resolve(container);
         });

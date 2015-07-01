@@ -9,6 +9,27 @@ var ContainerFactory = require('./../src/ContainerFactory');
 var ServiceArgument = require('./../src/ServiceArgument');
 
 describe('ServiceArgument', function () {
+    it('should detect simple value', function () {
+        var serviceArgumentServiceReference = new ServiceArgument('foo');
+
+        expect(serviceArgumentServiceReference.isServiceReference()).to.be.false;
+        expect(serviceArgumentServiceReference.isParameterReference()).to.be.false;
+    });
+
+    it('should detect service reference value', function () {
+        var serviceArgumentServiceReference = new ServiceArgument('@foo');
+
+        expect(serviceArgumentServiceReference.isServiceReference()).to.be.true;
+        expect(serviceArgumentServiceReference.isParameterReference()).to.be.false;
+    });
+
+    it('should detect parameter reference value', function () {
+        var serviceArgumentServiceReference = new ServiceArgument('%foo%');
+
+        expect(serviceArgumentServiceReference.isServiceReference()).to.be.false;
+        expect(serviceArgumentServiceReference.isParameterReference()).to.be.true;
+    });
+
     it('should return the unresolved value', function () {
         var serviceArgumentSimple = new ServiceArgument('foo');
         expect(serviceArgumentSimple.getValue()).to.equal('foo');
@@ -18,6 +39,23 @@ describe('ServiceArgument', function () {
 
         var serviceArgumentServiceReference = new ServiceArgument('@foo');
         expect(serviceArgumentServiceReference.getValue()).to.equal('@foo');
+    });
+
+    it('should return the referenced name of service reference', function () {
+                var serviceArgumentServiceReference = new ServiceArgument('@foo.bar');
+        expect(serviceArgumentServiceReference.getName()).to.equal('foo.bar');
+    });
+
+    it('should return the referenced name of parameter reference', function () {
+        var serviceArgumentParameterReference = new ServiceArgument('%foo.bar%');
+        expect(serviceArgumentParameterReference.getName()).to.equal('foo.bar');
+    });
+
+    it('should not return the referenced name of simple value', function () {
+        var serviceArgumentSimple = new ServiceArgument('foo');
+        expect(function() {
+            serviceArgumentSimple.getName();
+        }).to.throw('Simple value parameter do not have name.');
     });
 
     it('should not resolve simple argument', function () {
