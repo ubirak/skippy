@@ -4,8 +4,8 @@
         "node": true
     },
     "rules": {
-        "no-shadow": 1,
-        "no-unused-vars": 1,
+        "no-shadow": 0,
+        "no-unused-vars": 0,
         "valid-jsdoc": [
             2,
             {
