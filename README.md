@@ -13,7 +13,7 @@ Skippy is design to be an easy to use, robust, and well tested dependencies cont
 
 #### What Skippy doesn't do (and never will)
 - Introspect JSDoc or parameters name to determine witch service should be inject in a constructor function. You need define service dependencies in a configuration file
-- Cofee
+- Coffee
 
 #### What Skippy doesn't do for now (but maybe one day)
 - Use factory service to generate another service
