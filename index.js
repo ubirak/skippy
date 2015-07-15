@@ -1,5 +1,3 @@
 'use strict';
 
-module.exports = {
-    ContainerFactory: require('./src/ContainerFactory')
-};
+module.exports = require('./src/ContainerFactory');
