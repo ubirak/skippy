@@ -1,0 +1,19 @@
+language: node_js
+
+sudo: false
+
+node_js:
+    - "iojs-v2.4.0"
+    - "0.12"
+
+script:
+    - npm test
+    - npm run lint
+    - npm run coverage
+
+notifications:
+    email:
+        recipients:
+            - ci@verylastroom.com
+        on_success: change
+        on_failure: change
