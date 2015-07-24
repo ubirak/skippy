@@ -8,7 +8,7 @@
     "bdd": "mocha --colors --reporter=dot --watch --recursive test",
     "coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter=dot --recursive test ",
     "lint": "eslint --color .",
-    "test": "mocha --colors --reporter=list --recursive test"
+    "test": "mocha --colors --reporter=dot --recursive test"
   },
   "repository": {
     "type": "git",
