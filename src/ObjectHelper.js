@@ -22,7 +22,7 @@ var ObjectHelper = {
      * @param {*} object
      * @return {*}
      */
-    clone: function(object) {
+    clone: function (object) {
         return JSON.parse(JSON.stringify(object));
     }
 };

@@ -26,8 +26,8 @@ var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArgume
     /**
      * @return {Array.<ServiceArgument>}
      */
-    this.getServiceArguments = function() {
-        var serviceReferenceArgumentList = serviceArgumentList.filter(function(argument) {
+    this.getServiceArguments = function () {
+        var serviceReferenceArgumentList = serviceArgumentList.filter(function (argument) {
             return argument.isServiceReference();
         });
 

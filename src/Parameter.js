@@ -12,14 +12,14 @@ var Parameter = function Parameter(name, value) {
     /**
      * @return {String}
      */
-    this.getName = function() {
+    this.getName = function () {
         return this.name;
     };
 
     /**
      * @return {*}
      */
-    this.getValue = function() {
+    this.getValue = function () {
         return this.value;
     };
 };
