@@ -3,22 +3,22 @@
 [![npm](https://img.shields.io/npm/v/skippy.svg)](https://www.npmjs.com/package/skippy)
 [![Build Status](https://travis-ci.org/rezzza/skippy.svg?branch=master)](https://travis-ci.org/rezzza/skippy)
 
-Skippy is design to be an easy to use, robust, and well tested dependencies container. No magic inside.
+Skippy is designed to be an easy to use, robust, and well tested dependencies container. No magic inside.
 
-#### What Skippy does
-- Instantiate service as you describe in the configuration
-- Configure what should be use as service constructor parameters: you can another services as reference, parameters, or any values you have configure
-- Manage singleton instance of service (not defined by design pattern, but by configuration)
-- Check the dependencies graph to avoid cyclic dependencies (only on development environement: `process.env.NODE_ENV === 'development'`)
+#### What Skippy do
+- Instantiate service as described in the dependencies configuration.
+- Configure what should be used as service constructor parameters: you can pass another services as reference, parameters, or any values you have configured.
+- Manage singleton instance of service (not defined by design pattern, but by configuration).
+- Check the dependencies graph to avoid cyclic dependencies (only on development environement: `process.env.NODE_ENV === 'development'`).
 
-#### What Skippy doesn't do (and never will)
-- Introspect JSDoc or parameters name to determine witch service should be inject in a constructor function. You need define service dependencies in a configuration file
+#### What Skippy don't do (and never will)
+- Introspect JSDoc or parameters name to determine witch service should be inject in a constructor function. You have to define service dependencies in a configuration file.
 - Coffee
 
-#### What Skippy doesn't do for now (but maybe one day)
+#### What Skippy don't at the moment (maybe one day)
 - Use factory service to generate another service
 - Generate a lazy loading proxy function
-- Manage service scope (allowing private service, who can only be used to instantiate other service, not retrieved by the enduser)
+- Manage service scope (allowing private service, who can only be used to instantiate other service, not exposed to the world)
 
 
 ## Installation
@@ -104,15 +104,15 @@ module.exports = [
 ```
 
 A service configuration have four possible keys:
-- `name` (`string`, mandatory): the service name
-- `service` (`function`, mandatory): the service constructor function reference
-- `singleton` (`boolean`, optional, default `true`): If `true`, the service will be a singleton. If `false`, a new service will be instantiated each time
+- `name` (`string`, mandatory): the service name.
+- `service` (`function`, mandatory): the service constructor function reference.
+- `singleton` (`boolean`, optional, default `true`): If `true`, the service will be a singleton. If `false`, a new service will be instantiated each time.
 - `arguments` (`array`, optional, default empty array): An array of the value to inject in the service constructor (see "Arguments" section for more informations).
 
 
 ### Arguments
 
-They have three types of arguments type:
-- A string like `@foo`: use another service as argument value (here an instance of the service named `foo`)
-- A string like `%baz%`: use the corresponding parameter value as argument (here the `baz` parameter)
-- Any other value (scalar, object, function...) will be directly use as argument
+3 types of arguments type:
+- A string like `@foo`: use another service as argument value (here an instance of the service named `foo`).
+- A string like `%baz%`: use the corresponding parameter value as argument (here the `baz` parameter).
+- Any other value (scalar, object, function...) will be directly used as an argument.
