@@ -28,6 +28,13 @@
             2,
             "single"
         ],
+        "space-before-function-paren": [
+            2,
+            {
+                "anonymous": "always",
+                "named": "never"
+            }
+        ],
         "strict": [
             2,
             "global"
