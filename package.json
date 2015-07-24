@@ -17,7 +17,7 @@
   "author": "Armand Abric <armand@forgebinaire.net>",
   "license": "MIT",
   "devDependencies": {
-    "chai": "~3.0.0",
+    "chai": "~3.2.0",
     "eslint": "~0.24.1",
     "istanbul": "~0.3.17",
     "mocha": "~2.2.5",
