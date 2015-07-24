@@ -90,9 +90,11 @@ ContainerFactory.create = function (services, parameters) {
     var serviceDefinitionCollection = buildServiceDefinitionCollection(services);
     var parameterCollection = buildParameterCollection(parameters);
 
-    serviceDefinitionCollection.forEach(function (serviceDefinition) {
-        checkCyclicDependencies(serviceDefinition, serviceDefinitionCollection);
-    });
+    if (process.env.NODE_ENV === 'development') {
+        serviceDefinitionCollection.forEach(function (serviceDefinition) {
+            checkCyclicDependencies(serviceDefinition, serviceDefinitionCollection);
+        });
+    }
 
     return new Container(serviceDefinitionCollection, parameterCollection);
 };

@@ -90,15 +90,31 @@ describe('ContainerFactory', function () {
         expect(serviceBFromServiceD).to.not.be.equal(serviceB);
     });
 
-    it('should thrown an error if a service depend on an undefined service', function () {
-        expect(function() {
+    it('should thrown an error in development environment if a service depend on an undefined service', function () {
+        expect(function () {
+            process.env.NODE_ENV = 'development';
             ContainerFactory.create(servicesConfigurationErroredWithUnknownDependencies.services, servicesConfigurationErroredWithUnknownDependencies.parameters);
         }).to.throw('The service "bar.service.B" has dependencies on the unknown service "bar.service.C".');
     });
 
-    it('should thrown an error if services configuration has cyclic dependencies', function () {
-        expect(function() {
+    it('should not thrown an error in production environment if a service depend on an undefined service', function () {
+        expect(function () {
+            process.env.NODE_ENV = 'production';
+            ContainerFactory.create(servicesConfigurationErroredWithUnknownDependencies.services, servicesConfigurationErroredWithUnknownDependencies.parameters);
+        }).to.not.throw();
+    });
+
+    it('should thrown an error in development environment if services configuration has cyclic dependencies', function () {
+        expect(function () {
+            process.env.NODE_ENV = 'development';
             ContainerFactory.create(servicesConfigurationErroredWithCyclicDependencies.services, servicesConfigurationErroredWithCyclicDependencies.parameters);
         }).to.throw('Cyclic dependencies detected: "bar.service.B > bar.service.C > bar.service.D > bar.service.B".');
+    });
+
+    it('should thrown an error in production environment if services configuration has cyclic dependencies', function () {
+        expect(function () {
+            process.env.NODE_ENV = 'production';
+            ContainerFactory.create(servicesConfigurationErroredWithCyclicDependencies.services, servicesConfigurationErroredWithCyclicDependencies.parameters);
+        }).to.not.throw();
     });
 });
