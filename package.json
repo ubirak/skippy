@@ -2,11 +2,19 @@
   "name": "skippy",
   "version": "0.0.4",
   "description": "Simple and robust dependency container.",
-  "keywords": ["container", "dependency", "service", "injection", "dependency injection", "di"],
+  "keywords": [
+    "container",
+    "dependency",
+    "dependency injection",
+    "di",
+    "injection",
+    "service"
+  ],
   "main": "index.js",
   "scripts": {
     "bdd": "mocha --colors --reporter=dot --watch --recursive test",
-    "coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter=dot --recursive test ",
+    "coverage": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter=dot --recursive test",
+    "coverage-upload": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint --color .",
     "test": "mocha --colors --reporter=dot --recursive test"
   },
@@ -18,6 +26,7 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "~3.2.0",
+    "coveralls": "~2.11.3",
     "eslint": "~0.24.1",
     "istanbul": "~0.3.17",
     "mocha": "~2.2.5",
