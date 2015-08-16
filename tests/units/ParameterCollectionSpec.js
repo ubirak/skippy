@@ -18,12 +18,6 @@ describe('ParameterCollection', function () {
         }).not.to.throw();
     });
 
-    it('should only accept Array', function () {
-        expect(function () {
-            new ParameterCollection({});
-        }).to.throw();
-    });
-
     it('should only accept Parameter inside the Array', function () {
         var fooParameter = sinon.createStubInstance(Parameter);
         var barParameter = sinon.createStubInstance(Parameter);

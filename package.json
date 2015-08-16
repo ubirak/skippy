@@ -34,6 +34,6 @@
     "sinon-chai": "~2.8.0"
   },
   "dependencies": {
-    "immutable": "~3.7.4"
+    "lodash": "~3.10.1"
   }
 }

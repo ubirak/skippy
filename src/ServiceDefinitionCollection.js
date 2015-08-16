@@ -1,16 +1,17 @@
 'use strict';
 
-var List = require('immutable').List;
+var each = require('lodash/collection/each');
+var find = require('lodash/collection/find');
 var ServiceDefinition = require('./ServiceDefinition');
 
 /**
- * @param {Array.<ServiceDefinition>} serviceDefinitions
+ * @param {Array<ServiceDefinition>} serviceDefinitions
  * @constructor
  */
 var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDefinitions) {
-    this.serviceDefinitionList = new List(serviceDefinitions || []);
+    this.serviceDefinitions = serviceDefinitions || [];
 
-    this.serviceDefinitionList.map(function (definition, index) {
+    each(this.serviceDefinitions, function (definition, index) {
         if (!(definition instanceof ServiceDefinition)) {
             throw new Error('Wrong parameter type at position: ' + index);
         }
@@ -22,7 +23,7 @@ var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDe
  * @return {ServiceDefinition|undefined}
  */
 ServiceDefinitionCollection.prototype.getServiceDefinition = function (name) {
-    return this.serviceDefinitionList.find(function (serviceDefinition) {
+    return find(this.serviceDefinitions, function (serviceDefinition) {
         return (serviceDefinition.getName() === name);
     });
 };
@@ -39,7 +40,7 @@ ServiceDefinitionCollection.prototype.hasServiceDefinition = function (name) {
  * @param {Function} cb
  */
 ServiceDefinitionCollection.prototype.forEach = function (cb) {
-    this.serviceDefinitionList.forEach(function (serviceDefinition) {
+    each(this.serviceDefinitions, function (serviceDefinition) {
         return cb(serviceDefinition);
     });
 };
