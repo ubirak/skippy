@@ -1,11 +1,5 @@
 'use strict';
 
-var Parameter = require('./Parameter');
-var ParameterCollection = require('./ParameterCollection');
-var ServiceArgument = require('./ServiceArgument');
-var ServiceArgumentCollection = require('./ServiceArgumentCollection');
-var ServiceDefinition = require('./ServiceDefinition');
-var ServiceDefinitionCollection = require('./ServiceDefinitionCollection');
 var ServiceStorage = require('./ServiceStorage');
 
 /**
@@ -17,44 +11,46 @@ var ServiceStorage = require('./ServiceStorage');
  * @constructor
  */
 var Container = function Container(serviceDefinitionCollection, parameterCollection) {
-    var serviceStorage = new ServiceStorage();
+    this.serviceDefinitionCollection = serviceDefinitionCollection;
+    this.parameterCollection = parameterCollection;
 
-    /**
-     * @param {String} name
-     * @return {*|null}
-     */
-    this.getParameter = function (name) {
-        if (!parameterCollection.hasParameter(name)) {
-            throw new Error('Unknown parameter "' + name + '".');
-        }
+    this.serviceStorage = new ServiceStorage();
+};
 
-        var parameter = parameterCollection.getParameter(name);
+/**
+ * @param {String} name
+ * @return {*|null}
+ */
+Container.prototype.getParameter = function (name) {
+    if (!this.parameterCollection.hasParameter(name)) {
+        throw new Error('Unknown parameter "' + name + '".');
+    }
 
-        return parameter.getValue();
-    };
+    var parameter = this.parameterCollection.getParameter(name);
 
-    /**
-     * @param {String} name
-     * @return {*}
-     */
-    this.getService = function (name) {
-        if (!serviceDefinitionCollection.hasServiceDefinition(name)) {
-            throw new Error('Unknown service "' + name + '".');
-        }
+    return parameter.getValue();
+};
 
-        if (serviceStorage.hasInstance(name)) {
-            return serviceStorage.getInstance(name);
-        }
+/**
+ * @param {String} name
+ * @return {*}
+ */
+Container.prototype.getService = function (name) {
+    if (!this.serviceDefinitionCollection.hasServiceDefinition(name)) {
+        throw new Error('Unknown service "' + name + '".');
+    }
 
-        var serviceDefinition = serviceDefinitionCollection.getServiceDefinition(name);
-        var serviceInstance = serviceDefinition.createInstance(this);
+    if (this.serviceStorage.hasInstance(name)) {
+        return this.serviceStorage.getInstance(name);
+    }
 
-        if (serviceDefinition.isSingleton()) {
-            serviceStorage.addInstance(name, serviceInstance);
-        }
+    var serviceDefinition = this.serviceDefinitionCollection.getServiceDefinition(name);
+    var serviceInstance = serviceDefinition.createInstance(this);
+    if (serviceDefinition.isSingleton()) {
+        this.serviceStorage.addInstance(name, serviceInstance);
+    }
 
-        return serviceInstance;
-    };
+    return serviceInstance;
 };
 
 module.exports = Container;

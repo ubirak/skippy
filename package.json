@@ -12,11 +12,11 @@
   ],
   "main": "index.js",
   "scripts": {
-    "bdd": "mocha --colors --reporter=dot --watch --recursive test",
-    "coverage": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter=dot --recursive test",
+    "bdd": "mocha --colors --reporter=dot --watch --recursive tests",
+    "coverage": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter=dot --recursive tests",
     "coverage-upload": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint --color .",
-    "test": "mocha --colors --reporter=dot --recursive test"
+    "test": "mocha --colors --reporter=dot --recursive tests"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,8 @@
     "eslint": "~1.2.1",
     "istanbul": "~0.3.18",
     "mocha": "~2.2.5",
-    "sinon": "~1.16.1"
+    "sinon": "~1.16.1",
+    "sinon-chai": "~2.8.0"
   },
   "dependencies": {
     "immutable": "~3.7.4"

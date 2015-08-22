@@ -1,59 +1,59 @@
 'use strict';
 
 var ObjectHelper = require('./ObjectHelper');
-var Container = require('./Container');
-var ServiceArgument = require('./ServiceArgument');
-var ServiceArgumentCollection = require('./ServiceArgumentCollection');
 
 /**
  * @param {String} name
- * @param {Function} constructor
+ * @param {Function} serviceConstructor
  * @param {ServiceArgumentCollection} serviceArgumentCollection
- * @param {boolean} isSingleton
+ * @param {boolean} isSingletonService
  * @constructor
  */
-var ServiceDefinition = function ServiceDefinition(name, constructor, serviceArgumentCollection, isSingleton) {
-    isSingleton = !!isSingleton;
+var ServiceDefinition = function ServiceDefinition(name, serviceConstructor, serviceArgumentCollection, isSingletonService) {
+    this.name = name;
+    this.serviceConstructor = serviceConstructor;
+    this.serviceArgumentCollection = serviceArgumentCollection;
+    this.isSingletonService = !!isSingletonService;
+};
 
-    /**
-     * @return {String}
-     */
-    this.getName = function () {
-        return name;
-    };
+/**
+ * @return {String}
+ */
+ServiceDefinition.prototype.getName = function getName() {
+    return this.name;
+};
 
-    /**
-     * @return {ServiceArgumentCollection}
-     */
-    this.getArgumentCollection = function () {
-        return serviceArgumentCollection;
-    };
+/**
+ * @return {ServiceArgumentCollection}
+ */
+ServiceDefinition.prototype.getArgumentCollection = function getArgumentCollection() {
+    return this.serviceArgumentCollection;
+};
 
-    /**
-     * @return {boolean}
-     */
-    this.isSingleton = function () {
-        return isSingleton;
-    };
+/**
+ * @return {boolean}
+ */
+ServiceDefinition.prototype.isSingleton = function isSingleton() {
+    return this.isSingletonService;
+};
 
-    /**
-     * @param {Container} container
-     * @return {*}
-     */
-    this.createInstance = function (container) {
-        return ObjectHelper.createInstance(constructor, this._resolveArguments(container));
-    };
+/**
+ * @param {Container} container
+ * @return {*}
+ */
+ServiceDefinition.prototype.createInstance = function createInstance(container) {
+    return ObjectHelper.createInstance(this.serviceConstructor, this._resolveArguments(container));
+};
 
-    /**
-     * @param {Container} container
-     * @return {Array}
-     * @private
-     */
-    this._resolveArguments = function (container) {
-        return serviceArgumentCollection.getArguments().map(function (argument) {
-            return argument.resolve(container);
-        });
-    };
+/**
+ * @param {Container} container
+ * @return {Array}
+ * @private
+ */
+ServiceDefinition.prototype._resolveArguments = function _resolveArguments(container) {
+    return this.serviceArgumentCollection.getArguments().map(function (argument) {
+        return argument.resolve(container);
+    });
 };
 
 module.exports = ServiceDefinition;

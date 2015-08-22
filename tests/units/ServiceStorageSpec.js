@@ -1,10 +1,7 @@
 'use strict';
 
-/* global describe */
-/* global it */
-
 var expect = require('chai').expect;
-var ServiceStorage = require('./../src/ServiceStorage');
+var ServiceStorage = require('./../../src/ServiceStorage');
 
 describe('ServiceStorage', function () {
     it('should  add an instance to the storage and return it', function () {

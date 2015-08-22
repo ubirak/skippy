@@ -1,19 +1,16 @@
 'use strict';
 
-/* global describe */
-/* global it */
-
 var expect = require('chai').expect;
-var Container = require('./../src/Container');
-var Parameter = require('./../src/Parameter');
-var ParameterCollection = require('./../src/ParameterCollection');
-var ServiceArgument = require('./../src/ServiceArgument');
-var ServiceArgumentCollection = require('./../src/ServiceArgumentCollection');
-var ServiceDefinition = require('./../src/ServiceDefinition');
-var ServiceDefinitionCollection = require('./../src/ServiceDefinitionCollection');
-var servicesConfigurationValid = require('./fixture/valid/services');
-var ServiceA = require('./fixture/valid/ServiceA');
-var ServiceC = require('./fixture/valid/ServiceC');
+var Container = require('./../../src/Container');
+var Parameter = require('./../../src/Parameter');
+var ParameterCollection = require('./../../src/ParameterCollection');
+var ServiceArgument = require('./../../src/ServiceArgument');
+var ServiceArgumentCollection = require('./../../src/ServiceArgumentCollection');
+var ServiceDefinition = require('./../../src/ServiceDefinition');
+var ServiceDefinitionCollection = require('./../../src/ServiceDefinitionCollection');
+var servicesConfigurationValid = require('./../fixture/valid/services');
+var ServiceA = require('./../fixture/valid/ServiceA');
+var ServiceC = require('./../fixture/valid/ServiceC');
 
 describe('Container', function () {
     it('should return the parameter value', function () {

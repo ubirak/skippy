@@ -1,14 +1,11 @@
 'use strict';
 
-/* global describe */
-/* global it */
-
 var expect = require('chai').expect;
-var ContainerFactory = require('./../src/ContainerFactory');
-var servicesConfigurationValid = require('./fixture/valid/services');
-var servicesConfigurationErroredWithCyclicDependencies = require('./fixture/errored-with-cyclic-dependencies/services');
-var servicesConfigurationErroredWithUnknownDependencies = require('./fixture/errored-with-unknown-dependencies/services');
-var ServiceA = require('./fixture/valid/ServiceA');
+var ContainerFactory = require('./../../src/ContainerFactory');
+var servicesConfigurationValid = require('./../fixture/valid/services');
+var servicesConfigurationErroredWithCyclicDependencies = require('./../fixture/errored-with-cyclic-dependencies/services');
+var servicesConfigurationErroredWithUnknownDependencies = require('./../fixture/errored-with-unknown-dependencies/services');
+var ServiceA = require('./../fixture/valid/ServiceA');
 
 describe('ContainerFactory', function () {
     it('should return the parameter value', function () {

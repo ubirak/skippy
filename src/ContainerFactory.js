@@ -10,7 +10,6 @@ var ServiceArgument = require('./ServiceArgument');
 var ServiceArgumentCollection = require('./ServiceArgumentCollection');
 var ServiceDefinition = require('./ServiceDefinition');
 var ServiceDefinitionCollection = require('./ServiceDefinitionCollection');
-var ServiceStorage = require('./ServiceStorage');
 
 /**
  * @param {Array} services
@@ -51,7 +50,7 @@ var buildParameterCollection = function buildParameterCollection(parameters) {
     return new ParameterCollection(parameterMap.toArray());
 };
 
-var checkCyclicDependencies = function (serviceDefinition, serviceDefinitionCollection, parentDependentServiceNames) {
+var checkCyclicDependencies = function checkCyclicDependencies(serviceDefinition, serviceDefinitionCollection, parentDependentServiceNames) {
     parentDependentServiceNames = parentDependentServiceNames || [serviceDefinition.getName()];
 
     var serviceArguments = new List(serviceDefinition.getArgumentCollection().getServiceArguments());
@@ -83,7 +82,7 @@ var ContainerFactory = {};
  * @return {Container}
  * @public
  */
-ContainerFactory.create = function (services, parameters) {
+ContainerFactory.create = function create(services, parameters) {
     services = services || [];
     parameters = parameters || {};
 

@@ -1,10 +1,7 @@
 'use strict';
 
-/* global describe */
-/* global it */
-
 var expect = require('chai').expect;
-var Parameter = require('./../src/Parameter');
+var Parameter = require('./../../src/Parameter');
 
 describe('Parameter', function() {
     it('should have name and a value', function() {

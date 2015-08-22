@@ -1,11 +1,9 @@
 'use strict';
 
-/* global describe */
-/* global it */
-
 var expect = require('chai').expect;
-var Parameter = require('./../src/Parameter');
-var ParameterCollection = require('./../src/ParameterCollection');
+var sinon = require('sinon');
+var Parameter = require('./../../src/Parameter');
+var ParameterCollection = require('./../../src/ParameterCollection');
 
 describe('ParameterCollection', function () {
     it('should accept no value', function () {
@@ -27,8 +25,8 @@ describe('ParameterCollection', function () {
     });
 
     it('should only accept Parameter inside the Array', function () {
-        var fooParameter = new Parameter('foo', 42);
-        var barParameter = new Parameter('bar', 51);
+        var fooParameter = sinon.createStubInstance(Parameter);
+        var barParameter = sinon.createStubInstance(Parameter);
 
         expect(function () {
             new ParameterCollection([fooParameter, barParameter]);
@@ -44,8 +42,8 @@ describe('ParameterCollection', function () {
     });
 
     it('should allow adding multiple time a parameter with the same name', function () {
-        var fooParameterA = new Parameter('foo', 42);
-        var fooParameterB = new Parameter('foo', 51);
+        var fooParameterA = sinon.createStubInstance(Parameter);
+        var fooParameterB = sinon.createStubInstance(Parameter);
 
         expect(function () {
             new ParameterCollection([fooParameterA, fooParameterB]);
@@ -54,7 +52,9 @@ describe('ParameterCollection', function () {
 
     describe('#hasParameter()', function () {
         it('should inform if a parameter is present', function () {
-            var fooParameter = new Parameter('foo', 42);
+            var fooParameter = sinon.createStubInstance(Parameter);
+            fooParameter.getName.returns('foo');
+
             var parameterCollection = new ParameterCollection([fooParameter]);
 
             expect(parameterCollection.hasParameter('foo')).to.be.true;
@@ -64,7 +64,9 @@ describe('ParameterCollection', function () {
 
     describe('#getParameter()', function () {
         it('should return the parameter instance', function () {
-            var fooParameter = new Parameter('foo', 42);
+            var fooParameter = sinon.createStubInstance(Parameter);
+            fooParameter.getName.returns('foo');
+
             var parameterCollection = new ParameterCollection([fooParameter]);
 
             expect(parameterCollection.getParameter('foo')).to.be.equal(fooParameter);

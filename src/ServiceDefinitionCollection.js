@@ -8,40 +8,40 @@ var ServiceDefinition = require('./ServiceDefinition');
  * @constructor
  */
 var ServiceDefinitionCollection = function ServiceDefinitionCollection(serviceDefinitions) {
-    var serviceDefinitionList = new List(serviceDefinitions || []);
+    this.serviceDefinitionList = new List(serviceDefinitions || []);
 
-    serviceDefinitionList.map(function (definition, index) {
+    this.serviceDefinitionList.map(function (definition, index) {
         if (!(definition instanceof ServiceDefinition)) {
             throw new Error('Wrong parameter type at position: ' + index);
         }
     });
+};
 
-    /**
-     * @param {String} name
-     * @return {ServiceDefinition|undefined}
-     */
-    this.getServiceDefinition = function (name) {
-        return serviceDefinitionList.find(function (serviceDefinition) {
-            return (serviceDefinition.getName() === name);
-        });
-    };
+/**
+ * @param {String} name
+ * @return {ServiceDefinition|undefined}
+ */
+ServiceDefinitionCollection.prototype.getServiceDefinition = function (name) {
+    return this.serviceDefinitionList.find(function (serviceDefinition) {
+        return (serviceDefinition.getName() === name);
+    });
+};
 
-    /**
-     * @param {String} name
-     * @return {Boolean}
-     */
-    this.hasServiceDefinition = function (name) {
-        return (undefined !== this.getServiceDefinition(name));
-    };
+/**
+ * @param {String} name
+ * @return {Boolean}
+ */
+ServiceDefinitionCollection.prototype.hasServiceDefinition = function (name) {
+    return (undefined !== this.getServiceDefinition(name));
+};
 
-    /**
-     * @param {Function} cb
-     */
-    this.forEach = function (cb) {
-        serviceDefinitionList.forEach(function (serviceDefinition) {
-            return cb(serviceDefinition);
-        });
-    };
+/**
+ * @param {Function} cb
+ */
+ServiceDefinitionCollection.prototype.forEach = function (cb) {
+    this.serviceDefinitionList.forEach(function (serviceDefinition) {
+        return cb(serviceDefinition);
+    });
 };
 
 module.exports = ServiceDefinitionCollection;
