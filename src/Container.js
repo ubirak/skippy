@@ -18,6 +18,8 @@ var Container = function Container(serviceDefinitionCollection, parameterCollect
 };
 
 /**
+ * Return a parameter value.
+ *
  * @param {String} name
  * @return {*|null}
  */
@@ -32,6 +34,8 @@ Container.prototype.getParameter = function (name) {
 };
 
 /**
+ * Return a sercice instance.
+ *
  * @param {String} name
  * @return {*}
  */
@@ -53,4 +57,24 @@ Container.prototype.getService = function (name) {
     return serviceInstance;
 };
 
+if (process.env.NODE_ENV === 'test') {
+    /**
+     * Replace a service instance by a mocked instance. Only avialable in test environement.
+     *
+     * @param {String} name
+     * @param {Function} mock
+     */
+    Container.prototype.mockService = function (name, mock) {
+        if (!this.serviceDefinitionCollection.hasServiceDefinition(name)) {
+            throw new Error('Unknown service "' + name + '".');
+        }
+
+        if (!this.serviceStorage.hasInstance(name)) {
+            this.serviceStorage.addInstance(name, mock);
+            return;
+        }
+
+        this.serviceStorage.replaceInstance(name, mock);
+    };
+}
 module.exports = Container;

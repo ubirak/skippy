@@ -8,6 +8,12 @@ var servicesConfigurationErroredWithUnknownDependencies = require('./../fixture/
 var ServiceA = require('./../fixture/valid/ServiceA');
 
 describe('ContainerFactory', function () {
+    var previousProcessEnv = process.env.NODE_ENV;
+
+    afterEach(function () {
+        process.env.NODE_ENV = previousProcessEnv;
+    });
+
     it('should return the parameter value', function () {
         var container = ContainerFactory.create(servicesConfigurationValid.services, servicesConfigurationValid.parameters);
 

@@ -29,6 +29,18 @@ ServiceStorage.prototype.addInstance = function (name, instance) {
 
 /**
  * @param {String} name
+ * @param {*} instance
+ */
+ServiceStorage.prototype.replaceInstance = function (name, instance) {
+    if (!this.hasInstance(name)) {
+        throw new Error('There is no service to replace with name the "' + name + '".');
+    }
+
+    this.instances[name] = instance;
+};
+
+/**
+ * @param {String} name
  * @return {*}
  */
 ServiceStorage.prototype.getInstance = function (name) {

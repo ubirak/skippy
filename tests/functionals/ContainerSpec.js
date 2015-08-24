@@ -1,6 +1,7 @@
 'use strict';
 
 var expect = require('chai').expect;
+var sinon = require('sinon');
 var Container = require('./../../src/Container');
 var Parameter = require('./../../src/Parameter');
 var ParameterCollection = require('./../../src/ParameterCollection');
@@ -136,5 +137,24 @@ describe('Container', function () {
         expect(serviceC.foo).to.be.equal('Pwouet');
         expect(serviceC.bar).to.be.equal(42);
         expect(serviceC.serviceA).to.be.equal(serviceA);
+    });
+
+    it('should replace a service by a mocked one', function () {
+        var serviceDefinitionCollection = sinon.createStubInstance(ServiceDefinitionCollection);
+        serviceDefinitionCollection.hasServiceDefinition.withArgs('foo').returns(true);
+
+        var parameterCollection = sinon.createStubInstance(ParameterCollection);
+
+        var fakeServiceMock = sinon.spy();
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
+        container.mockService('foo', fakeServiceMock);
+
+        expect(container.getService('foo')).to.be.equals(fakeServiceMock);
+        expect(fakeServiceMock).to.not.have.been.called;
+    });
+
+    it.skip('should replace a cached service by a mocker one', function () {
+        // TODO
     });
 });

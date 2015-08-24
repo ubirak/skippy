@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var ServiceStorage = require('./../../src/ServiceStorage');
 
 describe('ServiceStorage', function () {
-    it('should  add an instance to the storage and return it', function () {
+    it('should add an instance to the storage and return it', function () {
         var serviceStorage = new ServiceStorage();
 
         var someInstance = Object.create({a: 'bar'});
@@ -42,5 +42,27 @@ describe('ServiceStorage', function () {
 
         expect(serviceStorage.hasInstance('foo')).to.be.true;
         expect(serviceStorage.hasInstance('bar')).to.be.false;
+    });
+
+    it('should replace an instance to the storage and return it', function () {
+        var serviceStorage = new ServiceStorage();
+
+        var someInstance = Object.create({a: 'bar'});
+        var someOthenInstance = Object.create({b: 'baz'});
+
+        serviceStorage.addInstance('foo', someInstance);
+        serviceStorage.replaceInstance('foo', someOthenInstance);
+
+        expect(serviceStorage.getInstance('foo')).to.equals(someOthenInstance);
+    });
+
+    it('should throw an exception if there is no instance to replace', function () {
+        var serviceStorage = new ServiceStorage();
+
+        var someInstance = Object.create({a: 'bar'});
+
+        expect(function () {
+            serviceStorage.replaceInstance('foo', someInstance);
+        }).to.throw('There is no service to replace with name the "foo".');
     });
 });
