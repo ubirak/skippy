@@ -10,7 +10,8 @@ Skippy is designed to be an easy to use, robust, and well tested dependencies co
 - Instantiate service as described in the dependencies configuration.
 - Configure what should be used as service constructor parameters: you can pass another services as reference, parameters, or any values you have configured.
 - Manage singleton instance of service (not defined by design pattern, but by configuration).
-- Check the dependencies graph to avoid cyclic dependencies (only on development environement: `process.env.NODE_ENV === 'development'`).
+- Check the dependencies graph to avoid cyclic dependencies (only on development environment: `NODE_ENV="development"`).
+- Allowing injection of service mock (only in test environment: `NODE_ENV="test"`).
 
 #### What Skippy don't do (and never will)
 - Introspect JSDoc or parameters name to determine witch service should be inject in a constructor function. You have to define service dependencies in a configuration file.
