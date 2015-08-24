@@ -8,20 +8,20 @@
 var Parameter = function Parameter(name, value) {
     this.name = name;
     this.value = value;
+};
 
-    /**
-     * @return {String}
-     */
-    this.getName = function () {
-        return this.name;
-    };
+/**
+ * @return {String}
+ */
+Parameter.prototype.getName = function () {
+    return this.name;
+};
 
-    /**
-     * @return {*}
-     */
-    this.getValue = function () {
-        return this.value;
-    };
+/**
+ * @return {*}
+ */
+Parameter.prototype.getValue = function () {
+    return this.value;
 };
 
 module.exports = Parameter;

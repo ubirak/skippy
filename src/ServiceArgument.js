@@ -1,141 +1,135 @@
 'use strict';
 
-var Container = require('./Container');
-
 /**
  * @param {*} value
  * @constructor
  */
-var ServiceArgument = function ServiceArguments(value) {
-    // Filled at the end of the file.
-    var type = null;
-    var name = null;
+var ServiceArgument = function ServiceArgument(value) {
+    this.type = this._detectType(value);
+    this.name = value;
+};
 
-    /**
-     * @param {*} argumentValue
-     * @return {boolean}
-     */
-    this._isString = function (argumentValue) {
-        if ((typeof argumentValue).toLowerCase() !== 'string') {
-            return false;
-        }
+/**
+ * @param {*} argumentValue
+ * @return {boolean}
+ */
+ServiceArgument.prototype._isString = function _isString(argumentValue) {
+    if ((typeof argumentValue).toLowerCase() !== 'string') {
+        return false;
+    }
 
-        return true;
-    };
+    return true;
+};
 
-    /**
-     * @param {*} argumentValue
-     * @return {boolean}
-     * @private
-     */
-    this._isParameterReference = function (argumentValue) {
-        if (!this._isString(argumentValue)) {
-            return false;
-        }
+/**
+ * @param {*} argumentValue
+ * @return {boolean}
+ * @private
+ */
+ServiceArgument.prototype._isParameterReference = function _isParameterReference(argumentValue) {
+    if (!this._isString(argumentValue)) {
+        return false;
+    }
 
-        var variableReferenceRegex = /%([^\s]*)%/i;
+    var variableReferenceRegex = /%([^\s]*)%/i;
 
-        return variableReferenceRegex.test(argumentValue);
-    };
+    return variableReferenceRegex.test(argumentValue);
+};
 
-    /**
-     * @param {*} argumentValue
-     * @return {boolean}
-     * @private
-     */
-    this._isServiceReference = function (argumentValue) {
-        if (!this._isString(argumentValue)) {
-            return false;
-        }
+/**
+ * @param {*} argumentValue
+ * @return {boolean}
+ * @private
+ */
+ServiceArgument.prototype._isServiceReference = function _isServiceReference(argumentValue) {
+    if (!this._isString(argumentValue)) {
+        return false;
+    }
 
-        var serviceReferenceRegex = /@([^\s]*)/i;
+    var serviceReferenceRegex = /@([^\s]*)/i;
 
-        return serviceReferenceRegex.test(argumentValue);
-    };
+    return serviceReferenceRegex.test(argumentValue);
+};
 
-    /**
-     * @param {*} argumentValue
-     * @return {String}
-     * @private
-     */
-    this._detectType = function _detectParameterType(argumentValue) {
-        if (this._isParameterReference(argumentValue)) {
-            return ServiceArguments.TYPE_PARAMETER_REFERENCE;
-        } else if (this._isServiceReference(argumentValue)) {
-            return ServiceArguments.TYPE_SERVICE_REFERENCE;
-        }
+/**
+ * @param {*} argumentValue
+ * @return {String}
+ * @private
+ */
+ServiceArgument.prototype._detectType = function _detectType(argumentValue) {
+    if (this._isParameterReference(argumentValue)) {
+        return ServiceArgument.TYPE_PARAMETER_REFERENCE;
+    } else if (this._isServiceReference(argumentValue)) {
+        return ServiceArgument.TYPE_SERVICE_REFERENCE;
+    }
 
-        return ServiceArguments.TYPE_VALUE;
-    };
+    return ServiceArgument.TYPE_VALUE;
+};
 
-    /**
-     * @param {String} argumentName
-     * @return {String}
-     * @private
-     */
-    this._extractReferencedParameterName = function (argumentName) {
-        return argumentName.substr(1, (argumentName.length - 2));
-    };
+/**
+ * @param {String} argumentName
+ * @return {String}
+ * @private
+ */
+ServiceArgument.prototype._extractReferencedParameterName = function _extractReferencedParameterName(argumentName) {
+    return argumentName.substr(1, (argumentName.length - 2));
+};
 
-    /**
-     * @param {String} argumentName
-     * @return {String}
-     * @private
-     */
-    this._extractReferencedServiceName = function (argumentName) {
-        return argumentName.substr(1);
-    };
+/**
+ * @param {String} argumentName
+ * @return {String}
+ * @private
+ */
+ServiceArgument.prototype._extractReferencedServiceName = function _extractReferencedServiceName(argumentName) {
+    return argumentName.substr(1);
+};
 
-    /**
-     * @return {String}
-     */
-    this.getName = function () {
-        if (this.isParameterReference()) {
-            return this._extractReferencedParameterName(name);
-        } else if (this.isServiceReference()) {
-            return this._extractReferencedServiceName(name);
-        } else {
-            throw new Error('Simple value parameter do not have name.');
-        }
-    };
+/**
+ * @return {String}
+ */
+ServiceArgument.prototype.getName = function getName() {
+    if (this.isParameterReference()) {
+        return this._extractReferencedParameterName(this.name);
+    } else if (this.isServiceReference()) {
+        return this._extractReferencedServiceName(this.name);
+    } else {
+        throw new Error('Simple value parameter do not have name. Value: "' + this.name + '".');
+    }
+};
 
-    /**
-     * @return {*}
-     */
-    this.getValue = function () {
-        return value;
-    };
+/**
+ * @return {*}
+ */
+ServiceArgument.prototype.getValue = function getValue() {
+    return this.name;
+};
 
-    /**
-     * @return {Boolean}
-     */
-    this.isServiceReference = function () {
-        return (ServiceArgument.TYPE_SERVICE_REFERENCE === type);
-    };
+/**
+ * @return {Boolean}
+ */
+ServiceArgument.prototype.isServiceReference = function isServiceReference() {
+    return (ServiceArgument.TYPE_SERVICE_REFERENCE === this.type);
+};
 
-    /**
-     * @return {Boolean}
-     */
-    this.isParameterReference = function () {
-        return (ServiceArgument.TYPE_PARAMETER_REFERENCE === type);
-    };
+/**
+ * @return {Boolean}
+ */
+ServiceArgument.prototype.isParameterReference = function isParameterReference() {
+    return (ServiceArgument.TYPE_PARAMETER_REFERENCE === this.type);
+};
 
-    /**
-     * @param {Container} container
-     * @return {*}
-     */
-    this.resolve = function (container) {
-        if (ServiceArgument.TYPE_PARAMETER_REFERENCE === type) {
-            return container.getParameter(this._extractReferencedParameterName(name));
-        } else if (ServiceArgument.TYPE_SERVICE_REFERENCE === type) {
-            return container.getService(this._extractReferencedServiceName(name));
-        }
+/**
+ * @param {Container} container
+ * @return {*}
+ */
+ServiceArgument.prototype.resolve = function resolve(container) {
+    if (ServiceArgument.TYPE_PARAMETER_REFERENCE === this.type) {
+        return container.getParameter(this._extractReferencedParameterName(this.name));
+    } else if (ServiceArgument.TYPE_SERVICE_REFERENCE === this.type) {
+        return container.getService(this._extractReferencedServiceName(this.name));
+    }
 
-        return value;
-    };
-
-    type = this._detectType(value);
-    name = value;
+    return this.name;
 };
 
 ServiceArgument.TYPE_PARAMETER_REFERENCE = 'parameter-reference';

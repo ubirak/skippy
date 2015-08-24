@@ -12,11 +12,11 @@
   ],
   "main": "index.js",
   "scripts": {
-    "bdd": "mocha --colors --reporter=dot --watch --recursive test",
-    "coverage": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter=dot --recursive test",
-    "coverage-upload": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "bdd": "NODE_ENV=test mocha --colors --reporter=dot --watch --recursive tests",
+    "coverage": "NODE_ENV=test istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter=dot --recursive tests",
+    "coverage-upload": "NODE_ENV=test cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint --color .",
-    "test": "mocha --colors --reporter=dot --recursive test"
+    "test": "NODE_ENV=test mocha --colors --reporter=dot --recursive tests"
   },
   "repository": {
     "type": "git",
@@ -26,11 +26,12 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "~3.2.0",
-    "coveralls": "~2.11.3",
-    "eslint": "~0.24.1",
-    "istanbul": "~0.3.17",
+    "coveralls": "~2.11.4",
+    "eslint": "~1.2.1",
+    "istanbul": "~0.3.18",
     "mocha": "~2.2.5",
-    "sinon": "~1.15.4"
+    "sinon": "~1.16.1",
+    "sinon-chai": "~2.8.0"
   },
   "dependencies": {
     "immutable": "~3.7.4"

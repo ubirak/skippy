@@ -1,11 +1,5 @@
 'use strict';
 
-var Parameter = require('./Parameter');
-var ParameterCollection = require('./ParameterCollection');
-var ServiceArgument = require('./ServiceArgument');
-var ServiceArgumentCollection = require('./ServiceArgumentCollection');
-var ServiceDefinition = require('./ServiceDefinition');
-var ServiceDefinitionCollection = require('./ServiceDefinitionCollection');
 var ServiceStorage = require('./ServiceStorage');
 
 /**
@@ -17,44 +11,70 @@ var ServiceStorage = require('./ServiceStorage');
  * @constructor
  */
 var Container = function Container(serviceDefinitionCollection, parameterCollection) {
-    var serviceStorage = new ServiceStorage();
+    this.serviceDefinitionCollection = serviceDefinitionCollection;
+    this.parameterCollection = parameterCollection;
 
+    this.serviceStorage = new ServiceStorage();
+};
+
+/**
+ * Return a parameter value.
+ *
+ * @param {String} name
+ * @return {*|null}
+ */
+Container.prototype.getParameter = function (name) {
+    if (!this.parameterCollection.hasParameter(name)) {
+        throw new Error('Unknown parameter "' + name + '".');
+    }
+
+    var parameter = this.parameterCollection.getParameter(name);
+
+    return parameter.getValue();
+};
+
+/**
+ * Return a sercice instance.
+ *
+ * @param {String} name
+ * @return {*}
+ */
+Container.prototype.getService = function (name) {
+    if (!this.serviceDefinitionCollection.hasServiceDefinition(name)) {
+        throw new Error('Unknown service "' + name + '".');
+    }
+
+    if (this.serviceStorage.hasInstance(name)) {
+        return this.serviceStorage.getInstance(name);
+    }
+
+    var serviceDefinition = this.serviceDefinitionCollection.getServiceDefinition(name);
+    var serviceInstance = serviceDefinition.createInstance(this);
+    if (serviceDefinition.isSingleton()) {
+        this.serviceStorage.addInstance(name, serviceInstance);
+    }
+
+    return serviceInstance;
+};
+
+if (process.env.NODE_ENV === 'test') {
     /**
+     * Replace a service instance by a mocked instance. Only avialable in test environement.
+     *
      * @param {String} name
-     * @return {*|null}
+     * @param {Function} mock
      */
-    this.getParameter = function (name) {
-        if (!parameterCollection.hasParameter(name)) {
-            throw new Error('Unknown parameter "' + name + '".');
-        }
-
-        var parameter = parameterCollection.getParameter(name);
-
-        return parameter.getValue();
-    };
-
-    /**
-     * @param {String} name
-     * @return {*}
-     */
-    this.getService = function (name) {
-        if (!serviceDefinitionCollection.hasServiceDefinition(name)) {
+    Container.prototype.mockService = function (name, mock) {
+        if (!this.serviceDefinitionCollection.hasServiceDefinition(name)) {
             throw new Error('Unknown service "' + name + '".');
         }
 
-        if (serviceStorage.hasInstance(name)) {
-            return serviceStorage.getInstance(name);
+        if (!this.serviceStorage.hasInstance(name)) {
+            this.serviceStorage.addInstance(name, mock);
+            return;
         }
 
-        var serviceDefinition = serviceDefinitionCollection.getServiceDefinition(name);
-        var serviceInstance = serviceDefinition.createInstance(this);
-
-        if (serviceDefinition.isSingleton()) {
-            serviceStorage.addInstance(name, serviceInstance);
-        }
-
-        return serviceInstance;
+        this.serviceStorage.replaceInstance(name, mock);
     };
-};
-
+}
 module.exports = Container;

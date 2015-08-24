@@ -4,6 +4,7 @@ sudo: false
 
 node_js:
     - "iojs-v2.4.0"
+    - "iojs-v3.1.0"
     - "0.12"
 
 script:

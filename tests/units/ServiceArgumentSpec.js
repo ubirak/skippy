@@ -1,12 +1,9 @@
 'use strict';
 
-/* global describe */
-/* global it */
-
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var ContainerFactory = require('./../src/ContainerFactory');
-var ServiceArgument = require('./../src/ServiceArgument');
+var Container = require('./../../src/Container');
+var ServiceArgument = require('./../../src/ServiceArgument');
 
 describe('ServiceArgument', function () {
     it('should detect simple value', function () {
@@ -55,16 +52,13 @@ describe('ServiceArgument', function () {
         var serviceArgumentSimple = new ServiceArgument('foo');
         expect(function() {
             serviceArgumentSimple.getName();
-        }).to.throw('Simple value parameter do not have name.');
+        }).to.throw('Simple value parameter do not have name. Value: "foo".');
     });
 
     it('should not resolve simple argument', function () {
+        var container = sinon.createStubInstance(Container);
+
         var serviceArgument = new ServiceArgument('foo');
-
-        var container = ContainerFactory.create([], {});
-
-        sinon.stub(container, 'getParameter');
-        sinon.stub(container, 'getService');
 
         expect(serviceArgument.resolve(container)).to.equal('foo');
         expect(container.getParameter.called).to.be.false;
@@ -72,29 +66,26 @@ describe('ServiceArgument', function () {
     });
 
     it('should resolve variable reference argument', function () {
+        var container = sinon.createStubInstance(Container);
+        container.getParameter.returns(42);
+
         var serviceArgument = new ServiceArgument('%foo%');
 
-        var container = ContainerFactory.create([], {});
-
-        sinon.stub(container, 'getParameter').returns(42);
-        sinon.stub(container, 'getService');
-
-        expect(serviceArgument.resolve(container)).to.equal(42);
+        expect(serviceArgument.resolve(container)).to.equals(42);
         expect(container.getParameter.calledOnce).to.be.true;
         expect(container.getService.called).to.be.false;
     });
 
     it('should resolve service reference argument', function () {
-        var serviceArgument = new ServiceArgument('@foo');
-        var serviceMock = function() {
+        var fakeService = function() {
         };
 
-        var container = ContainerFactory.create([], {});
+        var container = sinon.createStubInstance(Container);
+        container.getService.returns(fakeService);
 
-        sinon.stub(container, 'getParameter');
-        sinon.stub(container, 'getService').returns(serviceMock);
+        var serviceArgument = new ServiceArgument('@foo');
 
-        expect(serviceArgument.resolve(container)).to.equal(serviceMock);
+        expect(serviceArgument.resolve(container)).to.equals(fakeService);
         expect(container.getParameter.called).to.be.false;
         expect(container.getService.calledOnce).to.be.true;
     });

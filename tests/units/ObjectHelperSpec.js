@@ -1,10 +1,7 @@
 'use strict';
 
-/* global describe */
-/* global it */
-
 var expect = require('chai').expect;
-var ObjectHelper = require('./../src/ObjectHelper');
+var ObjectHelper = require('./../../src/ObjectHelper');
 
 describe('ObjectHelper', function() {
     it('should create a new instance of given Object', function() {

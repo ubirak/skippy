@@ -1,13 +1,10 @@
 'use strict';
 
-/* global describe */
-/* global it */
-
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var ServiceDefinitionCollection = require('./../src/ServiceDefinitionCollection');
-var ServiceDefinition = require('./../src/ServiceDefinition');
-var ServiceArgumentCollection = require('./../src/ServiceArgumentCollection');
+var ServiceDefinitionCollection = require('./../../src/ServiceDefinitionCollection');
+var ServiceDefinition = require('./../../src/ServiceDefinition');
+var ServiceArgumentCollection = require('./../../src/ServiceArgumentCollection');
 
 describe('ServiceDefinitionCollection', function() {
     it('should only accept SericeDefinition', function() {
@@ -26,19 +23,11 @@ describe('ServiceDefinitionCollection', function() {
     });
 
     it('should return the asked service definition', function() {
-        var serviceDefinitionA = new ServiceDefinition(
-            'foo',
-            function() {},
-            new ServiceArgumentCollection(),
-            true
-        );
+        var serviceDefinitionA = sinon.createStubInstance(ServiceDefinition);
+        serviceDefinitionA.getName.returns('foo');
 
-        var serviceDefinitionB = new ServiceDefinition(
-            'bar',
-            function() {},
-            new ServiceArgumentCollection(),
-            true
-        );
+        var serviceDefinitionB = sinon.createStubInstance(ServiceDefinition);
+        serviceDefinitionB.getName.returns('bar');
 
         var serviceDefinitionCollection = new ServiceDefinitionCollection([
             serviceDefinitionA,
@@ -50,12 +39,8 @@ describe('ServiceDefinitionCollection', function() {
     });
 
     it('should inform if a service definition exist', function() {
-        var serviceDefinitionA = new ServiceDefinition(
-            'foo',
-            function() {},
-            new ServiceArgumentCollection(),
-            true
-        );
+        var serviceDefinitionA = sinon.createStubInstance(ServiceDefinition);
+        serviceDefinitionA.getName.returns('foo');
 
         var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA]);
 
@@ -64,26 +49,14 @@ describe('ServiceDefinitionCollection', function() {
     });
 
     it('should allow to iterate on each service definition', function() {
-        var serviceDefinitionA = new ServiceDefinition(
-            'foo',
-            function() {},
-            new ServiceArgumentCollection(),
-            true
-        );
+        var serviceDefinitionA = sinon.createStubInstance(ServiceDefinition);
+        serviceDefinitionA.getName.returns('foo');
 
-        var serviceDefinitionB = new ServiceDefinition(
-            'bar',
-            function() {},
-            new ServiceArgumentCollection(),
-            true
-        );
+        var serviceDefinitionB = sinon.createStubInstance(ServiceDefinition);
+        serviceDefinitionB.getName.returns('bar');
 
-        var serviceDefinitionC = new ServiceDefinition(
-            'baz',
-            function() {},
-            new ServiceArgumentCollection(),
-            false
-        );
+        var serviceDefinitionC = sinon.createStubInstance(ServiceDefinition);
+        serviceDefinitionC.getName.returns('baz');
 
         var serviceDefinitionCollection = new ServiceDefinitionCollection([
             serviceDefinitionA,
@@ -95,10 +68,11 @@ describe('ServiceDefinitionCollection', function() {
 
         serviceDefinitionCollection.forEach(spyCallback);
 
-        expect(spyCallback.callCount).to.be.equal(3);
-        expect(spyCallback.getCall(0).calledWith(serviceDefinitionA)).to.be.true;
-        expect(spyCallback.getCall(1).calledWith(serviceDefinitionB)).to.be.true;
-        expect(spyCallback.getCall(2).calledWith(serviceDefinitionC)).to.be.true;
+        expect(spyCallback).to.have.been.calledThrice;
+        expect(spyCallback.getCall(0)).to.have.been.calledWithExactly(serviceDefinitionA);
+        expect(spyCallback.getCall(1)).to.have.been.calledWithExactly(serviceDefinitionB);
+        expect(spyCallback.getCall(2)).to.have.been.calledWithExactly(serviceDefinitionC);
+
 
         // Empty ServiceDefinitionCollection
         var serviceDefinitionCollection = new ServiceDefinitionCollection();
@@ -106,6 +80,6 @@ describe('ServiceDefinitionCollection', function() {
 
         serviceDefinitionCollection.forEach(spyCallback);
 
-        expect(spyCallback.callCount).to.be.equal(0);
+        expect(spyCallback).to.not.have.been.called;
     });
 });
