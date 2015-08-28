@@ -23,7 +23,10 @@ describe('ContainerFactory', function () {
     it('should return the service instance', function () {
         var container = ContainerFactory.create(servicesConfigurationValid.services, servicesConfigurationValid.parameters);
 
-        expect(container.getService('foo.serviceA')).to.be.an.instanceof(ServiceA);
+        var serviceA = container.getService('foo.serviceA');
+        expect(serviceA).to.be.an.instanceof(ServiceA);
+        expect(serviceA.hello()).to.equals('world');
+        expect(serviceA.testClosure()).to.equals('boo');
     });
 
     it('should return the same service instance for singleton service', function () {
