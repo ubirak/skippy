@@ -1,16 +1,17 @@
 'use strict';
 
-var List = require('immutable').List;
+var each = require('lodash/collection/each');
+var find = require('lodash/collection/find');
 var Parameter = require('./Parameter');
 
 /**
- * @param {Array.<Parameter>} parameters
+ * @param {Array<Parameter>} parameters
  * @constructor
  */
 var ParameterCollection = function ParameterCollection(parameters) {
-    this.parameterList = new List(parameters || []);
+    this.parameters = parameters || [];
 
-    this.parameterList.forEach(function (parameter, key) {
+    each(this.parameters, function (parameter, key) {
         if (!(parameter instanceof Parameter)) {
             throw new Error('Wrong parameter type at position: "' + key + '".');
         }
@@ -22,7 +23,7 @@ var ParameterCollection = function ParameterCollection(parameters) {
  * @return {Parameter|undefined}
  */
 ParameterCollection.prototype.getParameter = function (name) {
-    return this.parameterList.find(function (parameter) {
+    return find(this.parameters, function (parameter) {
         return (name === parameter.getName());
     });
 };

@@ -1,16 +1,17 @@
 'use strict';
 
-var List = require('immutable').List;
+var each = require('lodash/collection/each');
+var filter = require('lodash/collection/filter');
 var ServiceArgument = require('./ServiceArgument');
 
 /**
- * @param {Array.<ServiceArgument>} serviceArguments
+ * @param {Array<ServiceArgument>} serviceArguments
  * @constructor
  */
 var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArguments) {
-    this.serviceArgumentList = new List(serviceArguments || []);
+    this.serviceArguments = serviceArguments || [];
 
-    this.serviceArgumentList.map(function (argument, index) {
+    each(this.serviceArguments, function (argument, index) {
         if (!(argument instanceof ServiceArgument)) {
             throw new Error('Wrong parameter type at position: ' + (index));
         }
@@ -18,21 +19,19 @@ var ServiceArgumentCollection = function ServiceArgumentCollection(serviceArgume
 };
 
 /**
- * @return {Array.<ServiceArgument>}
+ * @return {Array<ServiceArgument>}
  */
 ServiceArgumentCollection.prototype.getArguments = function () {
-    return this.serviceArgumentList.toArray();
+    return this.serviceArguments;
 };
 
 /**
- * @return {Array.<ServiceArgument>}
+ * @return {Array<ServiceArgument>}
  */
 ServiceArgumentCollection.prototype.getServiceArguments = function () {
-    var serviceReferenceArgumentList = this.serviceArgumentList.filter(function (argument) {
+    return filter(this.serviceArguments, function (argument) {
         return argument.isServiceReference();
     });
-
-    return serviceReferenceArgumentList.toArray();
 };
 
 module.exports = ServiceArgumentCollection;

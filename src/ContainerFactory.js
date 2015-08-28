@@ -1,7 +1,6 @@
 'use strict';
 
-var Map = require('immutable').Map;
-var List = require('immutable').List;
+var each = require('lodash/collection/each');
 var Container = require('./Container');
 var ObjectHelper = require('./ObjectHelper');
 var Parameter = require('./Parameter');
@@ -16,23 +15,26 @@ var ServiceDefinitionCollection = require('./ServiceDefinitionCollection');
  * @return {ServiceDefinitionCollection}
  */
 var buildServiceDefinitionCollection = function buildServiceDefinitionCollection(services) {
-    var servicesConfigurationList = new List(services);
+    var servicesConfigurationList = services || [];
 
-    var servicesDefinitionList = servicesConfigurationList.map(function (value) {
-        var argumentConfigurationList = new List(value.arguments || []);
-        var serviceArgumentList = argumentConfigurationList.map(function (argumentValue) {
-            return new ServiceArgument(argumentValue);
+    var servicesDefinitionList = [];
+    each(servicesConfigurationList, function (value) {
+        var argumentConfigurationList = value.arguments || [];
+
+        var serviceArgumentList = [];
+        each(argumentConfigurationList, function (argumentValue) {
+            serviceArgumentList.push(new ServiceArgument(argumentValue));
         });
 
-        return new ServiceDefinition(
+        servicesDefinitionList.push(new ServiceDefinition(
             value.name,
             value.service,
-            new ServiceArgumentCollection(serviceArgumentList.toArray()),
+            new ServiceArgumentCollection(serviceArgumentList),
             value.singleton || undefined
-        );
+        ));
     });
 
-    return new ServiceDefinitionCollection(servicesDefinitionList.toArray());
+    return new ServiceDefinitionCollection(servicesDefinitionList);
 };
 
 /**
@@ -41,21 +43,21 @@ var buildServiceDefinitionCollection = function buildServiceDefinitionCollection
  * @private
  */
 var buildParameterCollection = function buildParameterCollection(parameters) {
-    var parametersConfigurationMap = new Map(parameters);
+    var parameterMap = parameters || {};
 
-    var parameterMap = parametersConfigurationMap.map(function (value, key) {
-        return new Parameter(key, value);
+    var parameterList = [];
+    each(parameterMap, function (value, key) {
+        parameterList.push(new Parameter(key, value));
     });
 
-    return new ParameterCollection(parameterMap.toArray());
+    return new ParameterCollection(parameterList);
 };
 
 var checkCyclicDependencies = function checkCyclicDependencies(serviceDefinition, serviceDefinitionCollection, parentDependentServiceNames) {
     parentDependentServiceNames = parentDependentServiceNames || [serviceDefinition.getName()];
 
-    var serviceArguments = new List(serviceDefinition.getArgumentCollection().getServiceArguments());
-
-    serviceArguments.forEach(function (argument) {
+    var serviceArguments = serviceDefinition.getArgumentCollection().getServiceArguments();
+    each(serviceArguments, function (argument) {
         var serviceName = argument.getName();
 
         if (!serviceDefinitionCollection.hasServiceDefinition(serviceName)) {
@@ -77,7 +79,7 @@ var checkCyclicDependencies = function checkCyclicDependencies(serviceDefinition
 var ContainerFactory = {};
 
 /**
- * @param {Array.<{name: String, service: Function, arguments: Array.<String|*>}>} services
+ * @param {Array<{name: String, service: Function, arguments: Array<String|*>}>} services
  * @param {{String: *}} parameters
  * @return {Container}
  * @public
