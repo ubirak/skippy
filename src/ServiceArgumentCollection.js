@@ -4,6 +4,8 @@ var each = require('lodash/collection/each');
 var filter = require('lodash/collection/filter');
 var ServiceArgument = require('./ServiceArgument');
 
+// TODO: Rename to ArgumentCollection to allow a more logic re-use in the Call context.
+
 /**
  * @param {Array<ServiceArgument>} serviceArguments
  * @constructor
@@ -31,6 +33,17 @@ ServiceArgumentCollection.prototype.getArguments = function () {
 ServiceArgumentCollection.prototype.getServiceArguments = function () {
     return filter(this.serviceArguments, function (argument) {
         return argument.isServiceReference();
+    });
+};
+
+/**
+ * @param {Container} container
+ * @return {Array}
+ * @private
+ */
+ServiceArgumentCollection.prototype.resolveArguments = function resolveArguments(container) {
+    return this.serviceArguments.map(function (argument) {
+        return argument.resolve(container);
     });
 };
 

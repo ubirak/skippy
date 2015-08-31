@@ -2,6 +2,7 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
+var CallCollection = require('./../../src/CallCollection');
 var Container = require('./../../src/Container');
 var Parameter = require('./../../src/Parameter');
 var ParameterCollection = require('./../../src/ParameterCollection');
@@ -30,7 +31,8 @@ describe('Container', function () {
             'foo.serviceA',
             ServiceA,
             new ServiceArgumentCollection(),
-            true
+            true,
+            new CallCollection()
         );
 
         var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA]);
@@ -46,7 +48,8 @@ describe('Container', function () {
             'foo.serviceA',
             ServiceA,
             new ServiceArgumentCollection(),
-            true
+            true,
+            new CallCollection()
         );
 
         var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA]);
@@ -65,7 +68,8 @@ describe('Container', function () {
             'foo.serviceA',
             ServiceA,
             new ServiceArgumentCollection(),
-            false
+            false,
+            new CallCollection()
         );
 
         var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA]);
@@ -109,7 +113,8 @@ describe('Container', function () {
             'foo.serviceA',
             ServiceA,
             new ServiceArgumentCollection(),
-            true
+            true,
+            new CallCollection()
         );
 
         var serviceDefinitionC = new ServiceDefinition(
@@ -120,7 +125,8 @@ describe('Container', function () {
                 new ServiceArgument(42),
                 new ServiceArgument('@foo.serviceA')
             ]),
-            false
+            false,
+            new CallCollection()
         );
 
         var parameterFoo = new Parameter('foo', 'Pwouet');

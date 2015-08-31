@@ -50,8 +50,13 @@ Container.prototype.getService = function (name) {
 
     var serviceDefinition = this.serviceDefinitionCollection.getServiceDefinition(name);
     var serviceInstance = serviceDefinition.createInstance(this);
+
     if (serviceDefinition.isSingleton()) {
         this.serviceStorage.addInstance(name, serviceInstance);
+    }
+
+    if (serviceDefinition.hasCalls()) {
+        serviceDefinition.triggerCalls(this, serviceInstance);
     }
 
     return serviceInstance;

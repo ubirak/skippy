@@ -96,6 +96,30 @@ describe('ContainerFactory', function () {
         expect(serviceBFromServiceD).to.not.be.equal(serviceB);
     });
 
+    it('should call the given method with the resolved arguments on the service instance', function () {
+        var container = ContainerFactory.create(servicesConfigurationValid.services, servicesConfigurationValid.parameters);
+
+        var serviceD = container.getService('foo.serviceD');
+        var serviceA = container.getService('foo.serviceA');
+
+        expect(serviceD.something).to.equals('Hello, I\'m a parameter!');
+        expect(serviceD.another).to.equals(serviceA);
+        expect(serviceD.someother).to.equals(51);
+    });
+
+    it('should only call once the given method on the service lifecycle', function () {
+        var container = ContainerFactory.create(servicesConfigurationValid.services, servicesConfigurationValid.parameters);
+        var serviceD = container.getService('foo.serviceD');
+
+        expect(serviceD.aCounter).to.equals(1);
+
+        serviceD = container.getService('foo.serviceD');
+        expect(container.getService('foo.serviceD').aCounter).to.equals(1);
+
+        serviceD = container.getService('foo.serviceD');
+        expect(container.getService('foo.serviceD').aCounter).to.equals(1);
+    });
+
     it('should thrown an error in development environment if a service depend on an undefined service', function () {
         expect(function () {
             process.env.NODE_ENV = 'development';

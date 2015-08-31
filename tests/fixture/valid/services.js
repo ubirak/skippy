@@ -34,7 +34,14 @@ module.exports = {
             'arguments': [
                 '@foo.serviceA',
                 '@foo.serviceB'
-            ]
+            ],
+            'calls': {
+                'saySomething': [
+                    '%hello.world%',
+                    '@foo.serviceA',
+                    51
+                ]
+            }
         }
     ]
 };

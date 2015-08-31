@@ -1,6 +1,8 @@
 'use strict';
 
 var each = require('lodash/collection/each');
+var Call = require('./Call');
+var CallCollection = require('./CallCollection');
 var Container = require('./Container');
 var ObjectHelper = require('./ObjectHelper');
 var Parameter = require('./Parameter');
@@ -26,11 +28,23 @@ var buildServiceDefinitionCollection = function buildServiceDefinitionCollection
             serviceArgumentList.push(new ServiceArgument(argumentValue));
         });
 
+        var calls = value.calls || {};
+        var callList = [];
+        each(calls, function (callArguments, methodName) {
+            var callArgumentList = [];
+            each(callArguments, function (argumentValue) {
+                callArgumentList.push(new ServiceArgument(argumentValue));
+            });
+
+            callList.push(new Call(methodName, new ServiceArgumentCollection(callArgumentList)));
+        });
+
         servicesDefinitionList.push(new ServiceDefinition(
             value.name,
             value.service,
             new ServiceArgumentCollection(serviceArgumentList),
-            value.singleton || undefined
+            value.singleton || undefined,
+            new CallCollection(callList)
         ));
     });
 
@@ -55,6 +69,8 @@ var buildParameterCollection = function buildParameterCollection(parameters) {
 
 var checkCyclicDependencies = function checkCyclicDependencies(serviceDefinition, serviceDefinitionCollection, parentDependentServiceNames) {
     parentDependentServiceNames = parentDependentServiceNames || [serviceDefinition.getName()];
+
+    // TODO: check calls dependencies.
 
     var serviceArguments = serviceDefinition.getArgumentCollection().getServiceArguments();
     each(serviceArguments, function (argument) {

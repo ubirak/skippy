@@ -38,17 +38,8 @@ describe('ServiceDefinition', function () {
     });
 
     it('should create an instance of a service with arguments', function () {
-        var serviceArgumentStubA = sinon.createStubInstance(ServiceArgument);
-        serviceArgumentStubA.resolve.returns(42);
-
-        var serviceArgumentStubB = sinon.createStubInstance(ServiceArgument);
-        serviceArgumentStubB.resolve.returns('bar');
-
         var serviceArgumentCollectionStub = sinon.createStubInstance(ServiceArgumentCollection);
-        serviceArgumentCollectionStub.getArguments.returns([
-            serviceArgumentStubA,
-            serviceArgumentStubB
-        ]);
+        serviceArgumentCollectionStub.resolveArguments.returns([42, 'bar']);
 
         var serviceConstructorSpy = sinon.spy(noop);
 
