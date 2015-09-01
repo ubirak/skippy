@@ -28,7 +28,6 @@ describe('ServiceDefinition', function () {
 
     it('should create an instance of a service without arguments', function () {
         var emptyFunctionArgumentCollectionStub = sinon.createStubInstance(FunctionArgumentCollection);
-        emptyFunctionArgumentCollectionStub.getArguments.returns([]);
 
         var container = sinon.createStubInstance(Container);
 

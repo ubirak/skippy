@@ -52,8 +52,6 @@ describe('CallCollection', function() {
         var calls = [
             sinon.createStubInstance(Call),
             sinon.createStubInstance(Call),
-            sinon.createStubInstance(Call),
-            sinon.createStubInstance(Call),
             sinon.createStubInstance(Call)
         ];
 
@@ -61,13 +59,11 @@ describe('CallCollection', function() {
 
         var callCollection = new CallCollection(calls);
 
-        callCollection.each(cb);
+        callCollection.forEach(cb);
 
-        expect(cb).to.have.callCount(5);
+        expect(cb).to.have.callCount(3);
         expect(cb.getCall(0)).to.have.been.calledWith(calls[0]);
         expect(cb.getCall(1)).to.have.been.calledWith(calls[1]);
         expect(cb.getCall(2)).to.have.been.calledWith(calls[2]);
-        expect(cb.getCall(3)).to.have.been.calledWith(calls[3]);
-        expect(cb.getCall(4)).to.have.been.calledWith(calls[4]);
     });
 });

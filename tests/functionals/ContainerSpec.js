@@ -102,7 +102,6 @@ describe('Container', function () {
 
         var container = new Container(serviceDefinitionCollection, parameterCollection);
 
-
         expect(function () {
             container.getService('i.do.not.exist');
         }).to.throw('Unknown service "i.do.not.exist".');

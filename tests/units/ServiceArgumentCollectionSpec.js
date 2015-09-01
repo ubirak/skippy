@@ -20,53 +20,43 @@ describe('FunctionArgumentCollection', function () {
         }).to.throw('Wrong parameter type at position: 1');
     });
 
-    it('should return all the arguments', function () {
+    it('should be iterable', function () {
         var functionArgumentStubA = sinon.createStubInstance(FunctionArgument);
         var functionArgumentStubB = sinon.createStubInstance(FunctionArgument);
         var functionArgumentStubC = sinon.createStubInstance(FunctionArgument);
 
+        var cbSpy = sinon.spy();
+
         var argumentCollection = new FunctionArgumentCollection([
             functionArgumentStubA,
             functionArgumentStubB,
             functionArgumentStubC
         ]);
 
-        var returnedFunctionArguments = argumentCollection.getArguments();
+        argumentCollection.forEach(cbSpy);
 
-        expect(returnedFunctionArguments).to.be.deep.equals([
-            functionArgumentStubA,
-            functionArgumentStubB,
-            functionArgumentStubC
-        ]);
+        expect(cbSpy.getCall(0)).to.have.been.calledWith(functionArgumentStubA, 0);
+        expect(cbSpy.getCall(1)).to.have.been.calledWith(functionArgumentStubB, 1);
+        expect(cbSpy.getCall(2)).to.have.been.calledWith(functionArgumentStubC, 2);
     });
 
-    it('should return only the service reference arguments', function () {
-        var createFunctionArgumentStub = function(isServiceReference) {
-            var functionArgumentStub = sinon.createStubInstance(FunctionArgument);
-            functionArgumentStub.isServiceReference.returns(isServiceReference);
+    it('should be iterable', function () {
+        var functionArgumentStubA = sinon.createStubInstance(FunctionArgument);
+        var functionArgumentStubB = sinon.createStubInstance(FunctionArgument);
+        var functionArgumentStubC = sinon.createStubInstance(FunctionArgument);
 
-            return functionArgumentStub;
-        };
+        var cbSpy = sinon.spy();
 
-        var functionArgumentStubA = createFunctionArgumentStub(false);
-        var functionArgumentStubB = createFunctionArgumentStub(false);
-        var functionArgumentStubC = createFunctionArgumentStub(true);
-        var functionArgumentStubD = createFunctionArgumentStub(true);
-        var functionArgumentStubE = createFunctionArgumentStub(false);
-
-        var argumentCollection = new FunctionArgumentCollection([
+        var functionArgumentCollection = new FunctionArgumentCollection([
             functionArgumentStubA,
             functionArgumentStubB,
-            functionArgumentStubC,
-            functionArgumentStubD,
-            functionArgumentStubE
+            functionArgumentStubC
         ]);
 
-        var returnedFunctionArguments = argumentCollection.getFunctionArguments();
+        functionArgumentCollection.forEach(cbSpy);
 
-        expect(returnedFunctionArguments).to.be.deep.equals([
-            functionArgumentStubC,
-            functionArgumentStubD
-        ]);
+        expect(cbSpy.getCall(0)).to.have.been.calledWith(functionArgumentStubA, 0);
+        expect(cbSpy.getCall(1)).to.have.been.calledWith(functionArgumentStubB, 1);
+        expect(cbSpy.getCall(2)).to.have.been.calledWith(functionArgumentStubC, 2);
     });
 });

@@ -1,7 +1,6 @@
 'use strict';
 
 var each = require('lodash/collection/each');
-var filter = require('lodash/collection/filter');
 var FunctionArgument = require('./FunctionArgument');
 
 /**
@@ -9,28 +8,23 @@ var FunctionArgument = require('./FunctionArgument');
  * @constructor
  */
 var FunctionArgumentCollection = function FunctionArgumentCollection(functionArguments) {
-    this.functionArguments = functionArguments || [];
+    functionArguments = functionArguments || [];
 
-    each(this.functionArguments, function (argument, index) {
+    each(functionArguments, function (argument, index) {
         if (!(argument instanceof FunctionArgument)) {
             throw new Error('Wrong parameter type at position: ' + (index));
         }
     });
+
+    this.functionArguments = functionArguments;
 };
 
 /**
- * @return {Array<FunctionArgument>}
+ * @param {Function} cb
  */
-FunctionArgumentCollection.prototype.getArguments = function () {
-    return this.functionArguments;
-};
-
-/**
- * @return {Array<FunctionArgument>}
- */
-FunctionArgumentCollection.prototype.getFunctionArguments = function () {
-    return filter(this.functionArguments, function (argument) {
-        return argument.isServiceReference();
+FunctionArgumentCollection.prototype.forEach = function (cb) {
+    each(this.functionArguments, function (functionArgument, index) {
+        cb(functionArgument, index);
     });
 };
 

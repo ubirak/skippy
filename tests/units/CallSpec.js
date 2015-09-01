@@ -19,7 +19,7 @@ describe('Call', function() {
         sinon.spy(instanceMock, 'setFoo');
 
         var call = new Call('setFoo', functionArgumentCollection);
-        call.trigger(container, instanceMock)
+        call.trigger(container, instanceMock);
 
         expect(instanceMock.setFoo).to.have.been.calledWithExactly('bar', 42);
     });

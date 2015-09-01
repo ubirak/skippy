@@ -124,7 +124,7 @@ describe('ContainerFactory', function () {
         expect(function () {
             process.env.NODE_ENV = 'development';
             ContainerFactory.create(servicesConfigurationErroredWithUnknownDependencies.services, servicesConfigurationErroredWithUnknownDependencies.parameters);
-        }).to.throw('The service "bar.service.B" has dependencies on the unknown service "bar.service.C".');
+        }).to.throw('The "bar.service.B" service constructor has dependencies on the unknown service "bar.service.C".');
     });
 
     it('should not thrown an error in production environment if a service depend on an undefined service', function () {
@@ -138,7 +138,7 @@ describe('ContainerFactory', function () {
         expect(function () {
             process.env.NODE_ENV = 'development';
             ContainerFactory.create(servicesConfigurationErroredWithCyclicDependencies.services, servicesConfigurationErroredWithCyclicDependencies.parameters);
-        }).to.throw('Cyclic dependencies detected: "bar.service.B > bar.service.C > bar.service.D > bar.service.B".');
+        }).to.throw('Cyclic dependencies detected on service constructor: "bar.service.B > bar.service.C > bar.service.D > bar.service.B".');
     });
 
     it('should thrown an error in production environment if services configuration has cyclic dependencies', function () {

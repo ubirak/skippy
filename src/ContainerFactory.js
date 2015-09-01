@@ -4,7 +4,6 @@ var each = require('lodash/collection/each');
 var Call = require('./Call');
 var CallCollection = require('./CallCollection');
 var Container = require('./Container');
-var ObjectHelper = require('./ObjectHelper');
 var Parameter = require('./Parameter');
 var ParameterCollection = require('./ParameterCollection');
 var FunctionArgument = require('./FunctionArgument');
@@ -67,31 +66,6 @@ var buildParameterCollection = function buildParameterCollection(parameters) {
     return new ParameterCollection(parameterList);
 };
 
-var checkCyclicDependencies = function checkCyclicDependencies(serviceDefinition, serviceDefinitionCollection, parentDependentServiceNames) {
-    parentDependentServiceNames = parentDependentServiceNames || [serviceDefinition.getName()];
-
-    // TODO: check calls dependencies.
-
-    var functionArguments = serviceDefinition.getArgumentCollection().getFunctionArguments();
-    each(functionArguments, function (argument) {
-        var serviceName = argument.getName();
-
-        if (!serviceDefinitionCollection.hasServiceDefinition(serviceName)) {
-            throw new Error('The service "' + serviceDefinition.getName() + '" has dependencies on the unknown service "' + serviceName + '".');
-        }
-
-        if (parentDependentServiceNames.indexOf(serviceName) !== -1) {
-            parentDependentServiceNames.push(serviceName); // To show the complete dependency graph.
-            throw new Error('Cyclic dependencies detected: "' + parentDependentServiceNames.join(' > ') + '".');
-        }
-
-        var childDependentServiceNames = ObjectHelper.clone(parentDependentServiceNames);
-        childDependentServiceNames.push(serviceName);
-
-        checkCyclicDependencies(serviceDefinitionCollection.getServiceDefinition(serviceName), serviceDefinitionCollection, childDependentServiceNames);
-    });
-};
-
 var ContainerFactory = {};
 
 /**
@@ -106,12 +80,6 @@ ContainerFactory.create = function create(services, parameters) {
 
     var serviceDefinitionCollection = buildServiceDefinitionCollection(services);
     var parameterCollection = buildParameterCollection(parameters);
-
-    if (process.env.NODE_ENV === 'development') {
-        serviceDefinitionCollection.forEach(function (serviceDefinition) {
-            checkCyclicDependencies(serviceDefinition, serviceDefinitionCollection);
-        });
-    }
 
     return new Container(serviceDefinitionCollection, parameterCollection);
 };

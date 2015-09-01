@@ -28,7 +28,7 @@ CallCollection.prototype.isEmpty = function () {
 /**
  * @param {Function} cb
  */
-CallCollection.prototype.each = function (cb) {
+CallCollection.prototype.forEach = function (cb) {
     each(this.calls, cb);
 };
 

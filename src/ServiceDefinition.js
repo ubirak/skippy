@@ -28,7 +28,7 @@ ServiceDefinition.prototype.getName = function getName() {
 /**
  * @return {FunctionArgumentCollection}
  */
-ServiceDefinition.prototype.getArgumentCollection = function getArgumentCollection() {
+ServiceDefinition.prototype.getFunctionArgumentCollection = function getFunctionArgumentCollection() {
     return this.functionArgumentCollection;
 };
 
@@ -59,7 +59,7 @@ ServiceDefinition.prototype.hasCalls = function hasCalls() {
  * @param {Object} instance
  */
 ServiceDefinition.prototype.triggerCalls = function triggerCalls(container, instance) {
-    this.callCollection.each(function (call) {
+    this.callCollection.forEach(function (call) {
         call.trigger(container, instance);
     });
 };
