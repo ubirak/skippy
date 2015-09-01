@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 var ServiceDefinitionCollection = require('./../../src/ServiceDefinitionCollection');
 var ServiceDefinition = require('./../../src/ServiceDefinition');
-var ServiceArgumentCollection = require('./../../src/ServiceArgumentCollection');
+var FunctionArgumentCollection = require('./../../src/FunctionArgumentCollection');
 
 describe('ServiceDefinitionCollection', function() {
     it('should only accept SericeDefinition', function() {

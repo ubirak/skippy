@@ -2,71 +2,71 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var ServiceArgumentCollection = require('./../../src/ServiceArgumentCollection');
-var ServiceArgument = require('./../../src/ServiceArgument');
+var FunctionArgumentCollection = require('./../../src/FunctionArgumentCollection');
+var FunctionArgument = require('./../../src/FunctionArgument');
 
-describe('ServiceArgumentCollection', function () {
-    it('should only accept ServiceArgument', function () {
+describe('FunctionArgumentCollection', function () {
+    it('should only accept FunctionArgument', function () {
         expect(function() {
-           new ServiceArgumentCollection([new Date()]);
+           new FunctionArgumentCollection([new Date()]);
         }).to.throw('Wrong parameter type at position: 0');
 
-        var serviceArgumentStub = sinon.createStubInstance(ServiceArgument);
+        var functionArgumentStub = sinon.createStubInstance(FunctionArgument);
         expect(function() {
-            new ServiceArgumentCollection([
-                serviceArgumentStub,
+            new FunctionArgumentCollection([
+                functionArgumentStub,
                 42
             ]);
         }).to.throw('Wrong parameter type at position: 1');
     });
 
     it('should return all the arguments', function () {
-        var serviceArgumentStubA = sinon.createStubInstance(ServiceArgument);
-        var serviceArgumentStubB = sinon.createStubInstance(ServiceArgument);
-        var serviceArgumentStubC = sinon.createStubInstance(ServiceArgument);
+        var functionArgumentStubA = sinon.createStubInstance(FunctionArgument);
+        var functionArgumentStubB = sinon.createStubInstance(FunctionArgument);
+        var functionArgumentStubC = sinon.createStubInstance(FunctionArgument);
 
-        var argumentCollection = new ServiceArgumentCollection([
-            serviceArgumentStubA,
-            serviceArgumentStubB,
-            serviceArgumentStubC
+        var argumentCollection = new FunctionArgumentCollection([
+            functionArgumentStubA,
+            functionArgumentStubB,
+            functionArgumentStubC
         ]);
 
-        var returnedServiceArguments = argumentCollection.getArguments();
+        var returnedFunctionArguments = argumentCollection.getArguments();
 
-        expect(returnedServiceArguments).to.be.deep.equals([
-            serviceArgumentStubA,
-            serviceArgumentStubB,
-            serviceArgumentStubC
+        expect(returnedFunctionArguments).to.be.deep.equals([
+            functionArgumentStubA,
+            functionArgumentStubB,
+            functionArgumentStubC
         ]);
     });
 
     it('should return only the service reference arguments', function () {
-        var createServiceArgumentStub = function(isServiceReference) {
-            var serviceArgumentStub = sinon.createStubInstance(ServiceArgument);
-            serviceArgumentStub.isServiceReference.returns(isServiceReference);
+        var createFunctionArgumentStub = function(isServiceReference) {
+            var functionArgumentStub = sinon.createStubInstance(FunctionArgument);
+            functionArgumentStub.isServiceReference.returns(isServiceReference);
 
-            return serviceArgumentStub;
+            return functionArgumentStub;
         };
 
-        var serviceArgumentStubA = createServiceArgumentStub(false);
-        var serviceArgumentStubB = createServiceArgumentStub(false);
-        var serviceArgumentStubC = createServiceArgumentStub(true);
-        var serviceArgumentStubD = createServiceArgumentStub(true);
-        var serviceArgumentStubE = createServiceArgumentStub(false);
+        var functionArgumentStubA = createFunctionArgumentStub(false);
+        var functionArgumentStubB = createFunctionArgumentStub(false);
+        var functionArgumentStubC = createFunctionArgumentStub(true);
+        var functionArgumentStubD = createFunctionArgumentStub(true);
+        var functionArgumentStubE = createFunctionArgumentStub(false);
 
-        var argumentCollection = new ServiceArgumentCollection([
-            serviceArgumentStubA,
-            serviceArgumentStubB,
-            serviceArgumentStubC,
-            serviceArgumentStubD,
-            serviceArgumentStubE
+        var argumentCollection = new FunctionArgumentCollection([
+            functionArgumentStubA,
+            functionArgumentStubB,
+            functionArgumentStubC,
+            functionArgumentStubD,
+            functionArgumentStubE
         ]);
 
-        var returnedServiceArguments = argumentCollection.getServiceArguments();
+        var returnedFunctionArguments = argumentCollection.getFunctionArguments();
 
-        expect(returnedServiceArguments).to.be.deep.equals([
-            serviceArgumentStubC,
-            serviceArgumentStubD
+        expect(returnedFunctionArguments).to.be.deep.equals([
+            functionArgumentStubC,
+            functionArgumentStubD
         ]);
     });
 });

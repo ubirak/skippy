@@ -7,8 +7,8 @@ var Container = require('./Container');
 var ObjectHelper = require('./ObjectHelper');
 var Parameter = require('./Parameter');
 var ParameterCollection = require('./ParameterCollection');
-var ServiceArgument = require('./ServiceArgument');
-var ServiceArgumentCollection = require('./ServiceArgumentCollection');
+var FunctionArgument = require('./FunctionArgument');
+var FunctionArgumentCollection = require('./FunctionArgumentCollection');
 var ServiceDefinition = require('./ServiceDefinition');
 var ServiceDefinitionCollection = require('./ServiceDefinitionCollection');
 
@@ -23,9 +23,9 @@ var buildServiceDefinitionCollection = function buildServiceDefinitionCollection
     each(servicesConfigurationList, function (value) {
         var argumentConfigurationList = value.arguments || [];
 
-        var serviceArgumentList = [];
+        var functionArgumentList = [];
         each(argumentConfigurationList, function (argumentValue) {
-            serviceArgumentList.push(new ServiceArgument(argumentValue));
+            functionArgumentList.push(new FunctionArgument(argumentValue));
         });
 
         var calls = value.calls || {};
@@ -33,16 +33,16 @@ var buildServiceDefinitionCollection = function buildServiceDefinitionCollection
         each(calls, function (callArguments, methodName) {
             var callArgumentList = [];
             each(callArguments, function (argumentValue) {
-                callArgumentList.push(new ServiceArgument(argumentValue));
+                callArgumentList.push(new FunctionArgument(argumentValue));
             });
 
-            callList.push(new Call(methodName, new ServiceArgumentCollection(callArgumentList)));
+            callList.push(new Call(methodName, new FunctionArgumentCollection(callArgumentList)));
         });
 
         servicesDefinitionList.push(new ServiceDefinition(
             value.name,
             value.service,
-            new ServiceArgumentCollection(serviceArgumentList),
+            new FunctionArgumentCollection(functionArgumentList),
             value.singleton || undefined,
             new CallCollection(callList)
         ));
@@ -72,8 +72,8 @@ var checkCyclicDependencies = function checkCyclicDependencies(serviceDefinition
 
     // TODO: check calls dependencies.
 
-    var serviceArguments = serviceDefinition.getArgumentCollection().getServiceArguments();
-    each(serviceArguments, function (argument) {
+    var functionArguments = serviceDefinition.getArgumentCollection().getFunctionArguments();
+    each(functionArguments, function (argument) {
         var serviceName = argument.getName();
 
         if (!serviceDefinitionCollection.hasServiceDefinition(serviceName)) {

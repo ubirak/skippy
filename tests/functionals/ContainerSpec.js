@@ -6,8 +6,8 @@ var CallCollection = require('./../../src/CallCollection');
 var Container = require('./../../src/Container');
 var Parameter = require('./../../src/Parameter');
 var ParameterCollection = require('./../../src/ParameterCollection');
-var ServiceArgument = require('./../../src/ServiceArgument');
-var ServiceArgumentCollection = require('./../../src/ServiceArgumentCollection');
+var FunctionArgument = require('./../../src/FunctionArgument');
+var FunctionArgumentCollection = require('./../../src/FunctionArgumentCollection');
 var ServiceDefinition = require('./../../src/ServiceDefinition');
 var ServiceDefinitionCollection = require('./../../src/ServiceDefinitionCollection');
 var servicesConfigurationValid = require('./../fixture/valid/services');
@@ -30,7 +30,7 @@ describe('Container', function () {
         var serviceDefinitionA = new ServiceDefinition(
             'foo.serviceA',
             ServiceA,
-            new ServiceArgumentCollection(),
+            new FunctionArgumentCollection(),
             true,
             new CallCollection()
         );
@@ -47,7 +47,7 @@ describe('Container', function () {
         var serviceDefinitionA = new ServiceDefinition(
             'foo.serviceA',
             ServiceA,
-            new ServiceArgumentCollection(),
+            new FunctionArgumentCollection(),
             true,
             new CallCollection()
         );
@@ -67,7 +67,7 @@ describe('Container', function () {
         var serviceDefinitionA = new ServiceDefinition(
             'foo.serviceA',
             ServiceA,
-            new ServiceArgumentCollection(),
+            new FunctionArgumentCollection(),
             false,
             new CallCollection()
         );
@@ -112,7 +112,7 @@ describe('Container', function () {
         var serviceDefinitionA = new ServiceDefinition(
             'foo.serviceA',
             ServiceA,
-            new ServiceArgumentCollection(),
+            new FunctionArgumentCollection(),
             true,
             new CallCollection()
         );
@@ -120,10 +120,10 @@ describe('Container', function () {
         var serviceDefinitionC = new ServiceDefinition(
             'foo.serviceC',
             ServiceC,
-            new ServiceArgumentCollection([
-                new ServiceArgument('%foo%'),
-                new ServiceArgument(42),
-                new ServiceArgument('@foo.serviceA')
+            new FunctionArgumentCollection([
+                new FunctionArgument('%foo%'),
+                new FunctionArgument(42),
+                new FunctionArgument('@foo.serviceA')
             ]),
             false,
             new CallCollection()

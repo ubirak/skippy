@@ -2,11 +2,11 @@
 
 /**
  * @param {String} methodName
- * @param {ServiceArgumentCollection} serviceArgumentCollection
+ * @param {FunctionArgumentCollection} functionArgumentCollection
  */
-var Call = function Call(methodName, serviceArgumentCollection) {
+var Call = function Call(methodName, functionArgumentCollection) {
     this.methodName = methodName;
-    this.serviceArgumentCollection = serviceArgumentCollection;
+    this.functionArgumentCollection = functionArgumentCollection;
 };
 
 /**
@@ -22,7 +22,7 @@ Call.prototype.trigger = function trigger(container, instance) {
         throw new Error('Can\'t call the given method: "' + this.methodName + '" is not a callable function on the given instance.');
     }
 
-    instance[this.methodName].apply(instance, this.serviceArgumentCollection.resolveArguments(container));
+    instance[this.methodName].apply(instance, this.functionArgumentCollection.resolveArguments(container));
 };
 
 module.exports = Call;
