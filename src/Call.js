@@ -25,4 +25,31 @@ Call.prototype.trigger = function trigger(container, instance) {
     instance[this.methodName].apply(instance, this.functionArgumentCollection.resolveArguments(container));
 };
 
+/**
+ * @param {ServiceDefinitionCollection} serviceDefinitionCollection
+ * @param {Function} serviceConstructor
+ */
+Call.prototype.validate = function validate(serviceDefinitionCollection, serviceConstructor) {
+    if (!this._isMethodDefined(serviceConstructor, this.methodName)) {
+        throw new Error('The method "' + this.methodName + '" does not exist on the given constructor.');
+    }
+};
+
+/**
+ * @param {Function} serviceConstructor
+ * @param {String} methodName
+ * @return {Boolean}
+ */
+Call.prototype._isMethodDefined = function _isObjectAsMethodDefined(serviceConstructor, methodName) {
+    if (serviceConstructor[this.methodName]) {
+        return true;
+    }
+
+    if (serviceConstructor.prototype && (serviceConstructor.prototype !== Function.prototype)) {
+        return this._isMethodDefined(serviceConstructor.prototype, methodName);
+    }
+
+    return false;
+};
+
 module.exports = Call;

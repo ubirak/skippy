@@ -1,5 +1,7 @@
 'use strict';
 
+var ServiceParent = require('./ServiceParent');
+
 /**
  * This service has two dependence:
  *  - a reference to another singleton service
@@ -9,7 +11,7 @@
  * @param {serviceB} serviceB
  * @constructor
  */
-var ServiceD = function ServiceC(serviceA, serviceB) {
+var ServiceD = function ServiceD(serviceA, serviceB) {
     this.serviceA = serviceA;
     this.serviceB = serviceB;
 
@@ -18,6 +20,8 @@ var ServiceD = function ServiceC(serviceA, serviceB) {
     this.another = null;
     this.someother = null;
 };
+
+ServiceD.prototype = new ServiceParent();
 
 ServiceD.prototype.saySomething = function (something, another, someother) {
     this.aCounter++;

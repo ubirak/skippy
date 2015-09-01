@@ -6,7 +6,7 @@
  * @param {ServiceB} serviceB
  * @constructor
  */
-var ServiceA = function ServiceB(serviceB) {
+var ServiceA = function ServiceA(serviceB) {
 };
 
 module.exports = ServiceA;

@@ -64,4 +64,15 @@ ServiceDefinition.prototype.triggerCalls = function triggerCalls(container, inst
     });
 };
 
+/**
+ * @param {Container} container
+ * @param {Object} instance
+ */
+ServiceDefinition.prototype.validateCalls = function triggerCalls(container) {
+    var self = this;
+    this.callCollection.forEach(function (call) {
+        call.validate(container, self.serviceConstructor);
+    });
+};
+
 module.exports = ServiceDefinition;

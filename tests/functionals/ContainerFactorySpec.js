@@ -5,6 +5,7 @@ var ContainerFactory = require('./../../src/ContainerFactory');
 var servicesConfigurationValid = require('./../fixture/valid/services');
 var servicesConfigurationErroredWithCyclicDependencies = require('./../fixture/errored-with-cyclic-dependencies/services');
 var servicesConfigurationErroredWithUnknownDependencies = require('./../fixture/errored-with-unknown-dependencies/services');
+var servicesConfigurationErroredWithInvalidCalls = require('./../fixture/errored-with-invalid-calls/services');
 var ServiceA = require('./../fixture/valid/ServiceA');
 
 describe('ContainerFactory', function () {
@@ -145,6 +146,20 @@ describe('ContainerFactory', function () {
         expect(function () {
             process.env.NODE_ENV = 'production';
             ContainerFactory.create(servicesConfigurationErroredWithCyclicDependencies.services, servicesConfigurationErroredWithCyclicDependencies.parameters);
+        }).to.not.throw();
+    });
+
+    it('should thrown an error in development environment if a service has call on an undefined method', function () {
+        expect(function () {
+            process.env.NODE_ENV = 'development';
+            ContainerFactory.create(servicesConfigurationErroredWithInvalidCalls.services, servicesConfigurationErroredWithInvalidCalls.parameters);
+        }).to.throw('The method "doBar" does not exist on the given constructor.');
+    });
+
+    it('should thrown an error in development environment if a service has call on an undefined method', function () {
+        expect(function () {
+            process.env.NODE_ENV = 'production';
+            ContainerFactory.create(servicesConfigurationErroredWithInvalidCalls.services, servicesConfigurationErroredWithInvalidCalls.parameters);
         }).to.not.throw();
     });
 });

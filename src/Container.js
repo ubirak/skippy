@@ -11,14 +11,15 @@ var ServiceStorage = require('./ServiceStorage');
  * @constructor
  */
 var Container = function Container(serviceDefinitionCollection, parameterCollection) {
-    if (process.env.NODE_ENV === 'development') {
-        serviceDefinitionCollection.checkCyclicDependencies();
-    }
-
     this.serviceDefinitionCollection = serviceDefinitionCollection;
     this.parameterCollection = parameterCollection;
 
     this.serviceStorage = new ServiceStorage();
+
+    if (process.env.NODE_ENV === 'development') {
+        this.serviceDefinitionCollection.checkCyclicDependencies();
+        this.serviceDefinitionCollection.validateCalls();
+    }
 };
 
 /**

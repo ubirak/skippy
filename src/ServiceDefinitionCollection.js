@@ -53,6 +53,24 @@ ServiceDefinitionCollection.prototype.checkCyclicDependencies = function () {
     });
 };
 
+/**
+ * @param {Container} container
+ */
+ServiceDefinitionCollection.prototype.validateCalls = function () {
+    // var self = this;
+    this.forEach(function (serviceDefinition) {
+        if (!serviceDefinition.hasCalls()) {
+            return;
+        }
+
+        serviceDefinition.validateCalls(this);
+    });
+};
+
+/**
+ * @param {ServiceDefinition} serviceDefinition
+ * @param {Array<String>} parentDependentServiceNames
+ */
 ServiceDefinitionCollection.prototype._recurcivelyCheckServiceConstructorCyclicDependencies = function (serviceDefinition, parentDependentServiceNames) {
     parentDependentServiceNames = parentDependentServiceNames || [serviceDefinition.getName()];
 
