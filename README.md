@@ -41,7 +41,6 @@ var parameters = {/* ... */}
 var container = SkippyFactory.create(services, parameters);
 
 var fooServiceInstance = container.getService('foo');
-var fooServiceInstance = container.getService('foo');
 
 var barParameterValue = container.getParameter('bar');
 
