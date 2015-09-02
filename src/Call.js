@@ -40,7 +40,7 @@ Call.prototype.validate = function validate(serviceDefinitionCollection, service
  * @param {String} methodName
  * @return {Boolean}
  */
-Call.prototype._isMethodDefined = function _isObjectAsMethodDefined(serviceConstructor, methodName) {
+Call.prototype._isMethodDefined = function _isMethodDefined(serviceConstructor, methodName) {
     if (serviceConstructor[this.methodName]) {
         return true;
     }

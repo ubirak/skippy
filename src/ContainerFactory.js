@@ -14,6 +14,7 @@ var ServiceDefinitionCollection = require('./ServiceDefinitionCollection');
 /**
  * @param {Array} services
  * @return {ServiceDefinitionCollection}
+ * @private
  */
 var buildServiceDefinitionCollection = function buildServiceDefinitionCollection(services) {
     var servicesConfigurationList = services || [];
@@ -69,19 +70,19 @@ var buildParameterCollection = function buildParameterCollection(parameters) {
 var ContainerFactory = {};
 
 /**
- * @param {Array<{name: String, service: Function, arguments: Array<String|*>}>} services
+ * @param {Array<{name: String, service: Function, arguments: Array<String|*>, calls: {String: Array<String|*>}}>} services
  * @param {{String: *}} parameters
+ * @param {Boolean} validateContainer
  * @return {Container}
- * @public
  */
-ContainerFactory.create = function create(services, parameters) {
+ContainerFactory.create = function create(services, parameters, validateContainer) {
     services = services || [];
     parameters = parameters || {};
 
     var serviceDefinitionCollection = buildServiceDefinitionCollection(services);
     var parameterCollection = buildParameterCollection(parameters);
 
-    return new Container(serviceDefinitionCollection, parameterCollection);
+    return new Container(serviceDefinitionCollection, parameterCollection, validateContainer);
 };
 
 module.exports = ContainerFactory;
