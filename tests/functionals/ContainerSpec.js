@@ -2,11 +2,12 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
+var CallCollection = require('./../../src/CallCollection');
 var Container = require('./../../src/Container');
 var Parameter = require('./../../src/Parameter');
 var ParameterCollection = require('./../../src/ParameterCollection');
-var ServiceArgument = require('./../../src/ServiceArgument');
-var ServiceArgumentCollection = require('./../../src/ServiceArgumentCollection');
+var FunctionArgument = require('./../../src/FunctionArgument');
+var FunctionArgumentCollection = require('./../../src/FunctionArgumentCollection');
 var ServiceDefinition = require('./../../src/ServiceDefinition');
 var ServiceDefinitionCollection = require('./../../src/ServiceDefinitionCollection');
 var servicesConfigurationValid = require('./../fixture/valid/services');
@@ -29,8 +30,9 @@ describe('Container', function () {
         var serviceDefinitionA = new ServiceDefinition(
             'foo.serviceA',
             ServiceA,
-            new ServiceArgumentCollection(),
-            true
+            new FunctionArgumentCollection(),
+            true,
+            new CallCollection()
         );
 
         var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA]);
@@ -45,8 +47,9 @@ describe('Container', function () {
         var serviceDefinitionA = new ServiceDefinition(
             'foo.serviceA',
             ServiceA,
-            new ServiceArgumentCollection(),
-            true
+            new FunctionArgumentCollection(),
+            true,
+            new CallCollection()
         );
 
         var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA]);
@@ -64,8 +67,9 @@ describe('Container', function () {
         var serviceDefinitionA = new ServiceDefinition(
             'foo.serviceA',
             ServiceA,
-            new ServiceArgumentCollection(),
-            false
+            new FunctionArgumentCollection(),
+            false,
+            new CallCollection()
         );
 
         var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionA]);
@@ -98,7 +102,6 @@ describe('Container', function () {
 
         var container = new Container(serviceDefinitionCollection, parameterCollection);
 
-
         expect(function () {
             container.getService('i.do.not.exist');
         }).to.throw('Unknown service "i.do.not.exist".');
@@ -108,19 +111,21 @@ describe('Container', function () {
         var serviceDefinitionA = new ServiceDefinition(
             'foo.serviceA',
             ServiceA,
-            new ServiceArgumentCollection(),
-            true
+            new FunctionArgumentCollection(),
+            true,
+            new CallCollection()
         );
 
         var serviceDefinitionC = new ServiceDefinition(
             'foo.serviceC',
             ServiceC,
-            new ServiceArgumentCollection([
-                new ServiceArgument('%foo%'),
-                new ServiceArgument(42),
-                new ServiceArgument('@foo.serviceA')
+            new FunctionArgumentCollection([
+                new FunctionArgument('%foo%'),
+                new FunctionArgument(42),
+                new FunctionArgument('@foo.serviceA')
             ]),
-            false
+            false,
+            new CallCollection()
         );
 
         var parameterFoo = new Parameter('foo', 'Pwouet');

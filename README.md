@@ -10,7 +10,8 @@ Skippy is designed to be an easy to use, robust, and well tested dependencies co
 - Instantiate service as described in the dependencies configuration.
 - Configure what should be used as service constructor parameters: you can pass another services as reference, parameters, or any values you have configured.
 - Manage singleton instance of service (not defined by design pattern, but by configuration).
-- Check the dependencies graph to avoid cyclic dependencies (only on development environment: `NODE_ENV="development"`).
+- Call custom method on service instance to finish it configuration.
+- Check the dependencies graph to avoid cyclic dependencies.
 - Allowing injection of service mock (only in test environment: `NODE_ENV="test"`).
 
 #### What Skippy don't do (and never will)
@@ -18,9 +19,9 @@ Skippy is designed to be an easy to use, robust, and well tested dependencies co
 - Coffee
 
 #### What Skippy don't at the moment (maybe one day)
-- Use factory service to generate another service
-- Generate a lazy loading proxy function
 - Manage service scope (allowing private service, who can only be used to instantiate other service, not exposed to the world)
+- Use factory service to generate another service (delayed, the post service creation hooks do a part of the job for now)
+- Generate a lazy loading proxy function (delayed, until ES6 proxy is well supported)
 
 
 ## Installation
@@ -100,6 +101,15 @@ module.exports = [
             "@foo.serviceA",
             "@foo.serviceB"
         ]
+    },
+    {
+        "name": "foo.serviceD",
+        "service": require("./ServiceD"),
+        "calls": {
+            "setLocale": [
+                "@foo.serviceB",
+                "%default.locale%"
+        ]
     }
 ];
 ```
@@ -109,6 +119,7 @@ A service configuration have four possible keys:
 - `service` (`function`, mandatory): the service constructor function reference.
 - `singleton` (`boolean`, optional, default `true`): If `true`, the service will be a singleton. If `false`, a new service will be instantiated each time.
 - `arguments` (`array`, optional, default empty array): An array of the value to inject in the service constructor (see "Arguments" section for more informations).
+- `calls` (`object`, optional, default empty array): A map of the method to call on the service, each method should have it `arguments` array (see "Arguments" section for more informations).
 
 
 ### Arguments

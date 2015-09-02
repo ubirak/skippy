@@ -5,15 +5,17 @@ var ObjectHelper = require('./ObjectHelper');
 /**
  * @param {String} name
  * @param {Function} serviceConstructor
- * @param {ServiceArgumentCollection} serviceArgumentCollection
+ * @param {FunctionArgumentCollection} functionArgumentCollection
  * @param {boolean} isSingletonService
+ * @param {CallCollection} callCollection
  * @constructor
  */
-var ServiceDefinition = function ServiceDefinition(name, serviceConstructor, serviceArgumentCollection, isSingletonService) {
+var ServiceDefinition = function ServiceDefinition(name, serviceConstructor, functionArgumentCollection, isSingletonService, callCollection) {
     this.name = name;
     this.serviceConstructor = serviceConstructor;
-    this.serviceArgumentCollection = serviceArgumentCollection;
+    this.functionArgumentCollection = functionArgumentCollection;
     this.isSingletonService = !!isSingletonService;
+    this.callCollection = callCollection;
 };
 
 /**
@@ -24,10 +26,10 @@ ServiceDefinition.prototype.getName = function getName() {
 };
 
 /**
- * @return {ServiceArgumentCollection}
+ * @return {FunctionArgumentCollection}
  */
-ServiceDefinition.prototype.getArgumentCollection = function getArgumentCollection() {
-    return this.serviceArgumentCollection;
+ServiceDefinition.prototype.getFunctionArgumentCollection = function getFunctionArgumentCollection() {
+    return this.functionArgumentCollection;
 };
 
 /**
@@ -42,17 +44,34 @@ ServiceDefinition.prototype.isSingleton = function isSingleton() {
  * @return {*}
  */
 ServiceDefinition.prototype.createInstance = function createInstance(container) {
-    return ObjectHelper.createInstance(this.serviceConstructor, this._resolveArguments(container));
+    return ObjectHelper.createInstance(this.serviceConstructor, this.functionArgumentCollection.resolveArguments(container));
+};
+
+/**
+ * @return {Boolean}
+ */
+ServiceDefinition.prototype.hasCalls = function hasCalls() {
+    return (!this.callCollection.isEmpty());
 };
 
 /**
  * @param {Container} container
- * @return {Array}
- * @private
+ * @param {Object} instance
  */
-ServiceDefinition.prototype._resolveArguments = function _resolveArguments(container) {
-    return this.serviceArgumentCollection.getArguments().map(function (argument) {
-        return argument.resolve(container);
+ServiceDefinition.prototype.triggerCalls = function triggerCalls(container, instance) {
+    this.callCollection.forEach(function (call) {
+        call.trigger(container, instance);
+    });
+};
+
+/**
+ * @param {Container} container
+ * @param {Object} instance
+ */
+ServiceDefinition.prototype.validateCalls = function triggerCalls(container) {
+    var self = this;
+    this.callCollection.forEach(function (call) {
+        call.validate(container, self.serviceConstructor);
     });
 };
 

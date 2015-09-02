@@ -5,15 +5,10 @@ var ContainerFactory = require('./../../src/ContainerFactory');
 var servicesConfigurationValid = require('./../fixture/valid/services');
 var servicesConfigurationErroredWithCyclicDependencies = require('./../fixture/errored-with-cyclic-dependencies/services');
 var servicesConfigurationErroredWithUnknownDependencies = require('./../fixture/errored-with-unknown-dependencies/services');
+var servicesConfigurationErroredWithInvalidCalls = require('./../fixture/errored-with-invalid-calls/services');
 var ServiceA = require('./../fixture/valid/ServiceA');
 
 describe('ContainerFactory', function () {
-    var previousProcessEnv = process.env.NODE_ENV;
-
-    afterEach(function () {
-        process.env.NODE_ENV = previousProcessEnv;
-    });
-
     it('should return the parameter value', function () {
         var container = ContainerFactory.create(servicesConfigurationValid.services, servicesConfigurationValid.parameters);
 
@@ -96,31 +91,63 @@ describe('ContainerFactory', function () {
         expect(serviceBFromServiceD).to.not.be.equal(serviceB);
     });
 
-    it('should thrown an error in development environment if a service depend on an undefined service', function () {
-        expect(function () {
-            process.env.NODE_ENV = 'development';
-            ContainerFactory.create(servicesConfigurationErroredWithUnknownDependencies.services, servicesConfigurationErroredWithUnknownDependencies.parameters);
-        }).to.throw('The service "bar.service.B" has dependencies on the unknown service "bar.service.C".');
+    it('should call the given method with the resolved arguments on the service instance', function () {
+        var container = ContainerFactory.create(servicesConfigurationValid.services, servicesConfigurationValid.parameters);
+
+        var serviceD = container.getService('foo.serviceD');
+        var serviceA = container.getService('foo.serviceA');
+
+        expect(serviceD.something).to.equals('Hello, I\'m a parameter!');
+        expect(serviceD.another).to.equals(serviceA);
+        expect(serviceD.someother).to.equals(51);
     });
 
-    it('should not thrown an error in production environment if a service depend on an undefined service', function () {
+    it('should only call once the given method on the service lifecycle', function () {
+        var container = ContainerFactory.create(servicesConfigurationValid.services, servicesConfigurationValid.parameters);
+        var serviceD = container.getService('foo.serviceD');
+
+        expect(serviceD.aCounter).to.equals(1);
+
+        serviceD = container.getService('foo.serviceD');
+        expect(container.getService('foo.serviceD').aCounter).to.equals(1);
+
+        serviceD = container.getService('foo.serviceD');
+        expect(container.getService('foo.serviceD').aCounter).to.equals(1);
+    });
+
+    it('should thrown an error if a service depend on an undefined service and the container validation is activated', function () {
         expect(function () {
-            process.env.NODE_ENV = 'production';
+            ContainerFactory.create(servicesConfigurationErroredWithUnknownDependencies.services, servicesConfigurationErroredWithUnknownDependencies.parameters, true);
+        }).to.throw('The "bar.service.B" service constructor has dependencies on the unknown service "bar.service.C".');
+    });
+
+    it('should not thrown an error if a service depend on an undefined service and the container validation isn\'t activated', function () {
+        expect(function () {
             ContainerFactory.create(servicesConfigurationErroredWithUnknownDependencies.services, servicesConfigurationErroredWithUnknownDependencies.parameters);
         }).to.not.throw();
     });
 
-    it('should thrown an error in development environment if services configuration has cyclic dependencies', function () {
+    it('should thrown an error if services configuration has cyclic dependencies and the container validation activated', function () {
         expect(function () {
-            process.env.NODE_ENV = 'development';
-            ContainerFactory.create(servicesConfigurationErroredWithCyclicDependencies.services, servicesConfigurationErroredWithCyclicDependencies.parameters);
-        }).to.throw('Cyclic dependencies detected: "bar.service.B > bar.service.C > bar.service.D > bar.service.B".');
+            ContainerFactory.create(servicesConfigurationErroredWithCyclicDependencies.services, servicesConfigurationErroredWithCyclicDependencies.parameters, true);
+        }).to.throw('Cyclic dependencies detected on service constructor: "bar.service.B > bar.service.C > bar.service.D > bar.service.B".');
     });
 
-    it('should thrown an error in production environment if services configuration has cyclic dependencies', function () {
+    it('should thrown an error if services configuration has cyclic dependencies and the container validation isn\'t activated', function () {
         expect(function () {
-            process.env.NODE_ENV = 'production';
             ContainerFactory.create(servicesConfigurationErroredWithCyclicDependencies.services, servicesConfigurationErroredWithCyclicDependencies.parameters);
+        }).to.not.throw();
+    });
+
+    it('should thrown an error if a service has call on an undefined method and the container validation activated', function () {
+        expect(function () {
+            ContainerFactory.create(servicesConfigurationErroredWithInvalidCalls.services, servicesConfigurationErroredWithInvalidCalls.parameters, true);
+        }).to.throw('The method "doBar" does not exist on the given constructor.');
+    });
+
+    it('should thrown an error if a service has call on an undefined method and the container validation isn\'t activated', function () {
+        expect(function () {
+            ContainerFactory.create(servicesConfigurationErroredWithInvalidCalls.services, servicesConfigurationErroredWithInvalidCalls.parameters);
         }).to.not.throw();
     });
 });

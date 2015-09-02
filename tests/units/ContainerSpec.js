@@ -55,4 +55,26 @@ describe('Container', function () {
         var container = new FreshContainer(serviceDefinitionCollection, parameterCollection);
         expect(container).to.not.have.property('mockService');
     });
+
+    it('should check the service cyclic dependencies if the container validation activated', function () {
+        var serviceDefinitionCollection = sinon.createStubInstance(ServiceDefinitionCollection);
+        serviceDefinitionCollection.checkCyclicDependencies.returns(null);
+        var parameterCollection = sinon.createStubInstance(ParameterCollection);
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection, true);
+
+        expect(serviceDefinitionCollection.checkCyclicDependencies).to.have.been.calledOnce;
+        expect(serviceDefinitionCollection.validateCalls).to.have.been.calledOnce;
+    });
+
+    it('should not check the service cyclic dependencies if the container validation isn\'t activated', function () {
+        var serviceDefinitionCollection = sinon.createStubInstance(ServiceDefinitionCollection);
+        serviceDefinitionCollection.checkCyclicDependencies.returns(null);
+        var parameterCollection = sinon.createStubInstance(ParameterCollection);
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
+
+        expect(serviceDefinitionCollection.checkCyclicDependencies).to.not.have.been.called;
+        expect(serviceDefinitionCollection.validateCalls).to.not.have.been.called;
+    });
 });

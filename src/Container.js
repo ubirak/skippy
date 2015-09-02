@@ -7,14 +7,21 @@ var ServiceStorage = require('./ServiceStorage');
  *
  * @param {ServiceDefinitionCollection} serviceDefinitionCollection
  * @param {ParameterCollection} parameterCollection
+ * @param {Boolean} validateContainer
  * @private
  * @constructor
  */
-var Container = function Container(serviceDefinitionCollection, parameterCollection) {
+var Container = function Container(serviceDefinitionCollection, parameterCollection, validateContainer) {
     this.serviceDefinitionCollection = serviceDefinitionCollection;
     this.parameterCollection = parameterCollection;
 
     this.serviceStorage = new ServiceStorage();
+
+    if (validateContainer) {
+        this.serviceDefinitionCollection.checkCyclicDependencies();
+        this.serviceDefinitionCollection.validateCalls();
+        // TODO: Validate the existance of used parameter as service arguments or call arguments.
+    }
 };
 
 /**
@@ -50,8 +57,13 @@ Container.prototype.getService = function (name) {
 
     var serviceDefinition = this.serviceDefinitionCollection.getServiceDefinition(name);
     var serviceInstance = serviceDefinition.createInstance(this);
+
     if (serviceDefinition.isSingleton()) {
         this.serviceStorage.addInstance(name, serviceInstance);
+    }
+
+    if (serviceDefinition.hasCalls()) {
+        serviceDefinition.triggerCalls(this, serviceInstance);
     }
 
     return serviceInstance;
@@ -77,4 +89,5 @@ if (process.env.NODE_ENV === 'test') {
         this.serviceStorage.replaceInstance(name, mock);
     };
 }
+
 module.exports = Container;
