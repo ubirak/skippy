@@ -43,7 +43,7 @@ var buildServiceDefinitionCollection = function buildServiceDefinitionCollection
             value.name,
             value.service,
             new FunctionArgumentCollection(functionArgumentList),
-            value.singleton || undefined,
+            value.singleton,
             new CallCollection(callList)
         ));
     });

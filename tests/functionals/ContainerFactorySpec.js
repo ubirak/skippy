@@ -42,6 +42,15 @@ describe('ContainerFactory', function () {
         expect(firstCall).to.not.be.equal(secondCall);
     });
 
+    it('should concider a service as singleton if it have no singleton configuration', function () {
+        var container = ContainerFactory.create(servicesConfigurationValid.services, servicesConfigurationValid.parameters);
+
+        var firstCall = container.getService('foo.serviceE');
+        var secondCall = container.getService('foo.serviceE');
+
+        expect(firstCall).to.equals(secondCall);
+    });
+
     it('should throw an exception on undefined parameter', function () {
         var container = ContainerFactory.create(servicesConfigurationValid.services, servicesConfigurationValid.parameters);
 

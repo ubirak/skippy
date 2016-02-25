@@ -42,6 +42,10 @@ module.exports = {
                     51
                 ]
             }
+        },
+        {
+            'name': 'foo.serviceE',
+            'service': require('./ServiceE')
         }
     ]
 };
