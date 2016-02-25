@@ -14,7 +14,7 @@ var ServiceDefinition = function ServiceDefinition(name, serviceConstructor, fun
     this.name = name;
     this.serviceConstructor = serviceConstructor;
     this.functionArgumentCollection = functionArgumentCollection;
-    this.isSingletonService = !!isSingletonService;
+    this.isSingletonService = (isSingletonService !== undefined ? !!isSingletonService : true);
     this.callCollection = callCollection;
 };
 
