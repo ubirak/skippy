@@ -1,6 +1,6 @@
 'use strict';
 
-var each = require('lodash/collection/each');
+var each = require('lodash/each');
 var Call = require('./Call');
 var CallCollection = require('./CallCollection');
 var Container = require('./Container');
