@@ -1,7 +1,7 @@
 'use strict';
 
-var each = require('lodash/collection/each');
-var find = require('lodash/collection/find');
+var each = require('lodash/each');
+var find = require('lodash/find');
 var ServiceDefinition = require('./ServiceDefinition');
 var ObjectHelper = require('./ObjectHelper');
 
