@@ -69,25 +69,24 @@ Container.prototype.getService = function (name) {
     return serviceInstance;
 };
 
-if (process.env.NODE_ENV === 'test') {
-    /**
-     * Replace a service instance by a mocked instance. Only avialable in test environement.
-     *
-     * @param {String} name
-     * @param {Function} mock
-     */
-    Container.prototype.mockService = function (name, mock) {
-        if (!this.serviceDefinitionCollection.hasServiceDefinition(name)) {
-            throw new Error('Unknown service "' + name + '".');
-        }
+/**
+ * Replace a service instance by a mocked instance. Should only be used in test
+ * environement.
+ *
+ * @param {String} name
+ * @param {Function} mock
+ */
+Container.prototype.mockService = function (name, mock) {
+    if (!this.serviceDefinitionCollection.hasServiceDefinition(name)) {
+        throw new Error('Unknown service "' + name + '".');
+    }
 
-        if (!this.serviceStorage.hasInstance(name)) {
-            this.serviceStorage.addInstance(name, mock);
-            return;
-        }
+    if (!this.serviceStorage.hasInstance(name)) {
+        this.serviceStorage.addInstance(name, mock);
+        return;
+    }
 
-        this.serviceStorage.replaceInstance(name, mock);
-    };
-}
+    this.serviceStorage.replaceInstance(name, mock);
+};
 
 module.exports = Container;
