@@ -45,6 +45,7 @@ var fooServiceInstance = container.getService('foo');
 
 var barParameterValue = container.getParameter('bar');
 
+constainer.destroy();
 ```
 
 ## Configuration
