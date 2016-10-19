@@ -18,7 +18,7 @@ Skippy is designed to be an easy to use, robust, and well tested dependencies co
 - Introspect JSDoc or parameters name to determine witch service should be inject in a constructor function. You have to define service dependencies in a configuration file.
 - Coffee
 
-#### What Skippy don't at the moment (maybe one day)
+#### What Skippy don't do at the moment (maybe one day)
 - Manage service scope (allowing private service, who can only be used to instantiate other service, not exposed to the world)
 - Use factory service to generate another service (delayed, the post service creation hooks do a part of the job for now)
 - Generate a lazy loading proxy function (delayed, until ES6 proxy is well supported)
