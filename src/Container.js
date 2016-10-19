@@ -118,9 +118,11 @@ Container.prototype.destroy = function () {
                 serviceInstance.destructor();
             }
         }
-
-        delete self.serviceStorage;
     });
+
+    delete this.parameterCollection;
+    delete this.serviceDefinitionCollection;
+    delete this.serviceStorage;
 };
 
 module.exports = Container;
