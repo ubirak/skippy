@@ -13,6 +13,7 @@ var ServiceDefinitionCollection = require('./../../src/ServiceDefinitionCollecti
 var servicesConfigurationValid = require('./../fixture/valid/services');
 var ServiceA = require('./../fixture/valid/ServiceA');
 var ServiceC = require('./../fixture/valid/ServiceC');
+var ServiceF = require('./../fixture/valid/ServiceF');
 
 describe('Container', function () {
     it('should return the parameter value', function () {
@@ -161,5 +162,47 @@ describe('Container', function () {
 
     it.skip('should replace a cached service by a mocker one', function () {
         // TODO
+    });
+
+    it('should be inusable after it\'s destruction', function () {
+        var serviceDefinitionCollection = new ServiceDefinitionCollection();
+        var parameterCollection = new ParameterCollection();
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
+        container.destroy();
+
+        expect(() => {
+            container.getParameter()
+        }).to.throw('This container instance has been destroyed.');
+
+        expect(() => {
+            container.getService()
+        }).to.throw('This container instance has been destroyed.');
+
+        expect(() => {
+            container.mockService()
+        }).to.throw('This container instance has been destroyed.');
+    });
+
+    it('should invoke the `destructor` method on a service when the container is destroyed', function () {
+        var serviceDefinitionF = new ServiceDefinition(
+            'foo.serviceF',
+            ServiceF,
+            new FunctionArgumentCollection(),
+            true,
+            new CallCollection()
+        );
+
+        var serviceDefinitionCollection = new ServiceDefinitionCollection([serviceDefinitionF]);
+        var parameterCollection = new ParameterCollection();
+
+        var container = new Container(serviceDefinitionCollection, parameterCollection);
+
+        var serviceFInstance = container.getService('foo.serviceF');
+        var destructorSpy = sinon.spy(serviceFInstance, 'destructor');
+
+        container.destroy();
+
+        expect(destructorSpy).to.have.been.calledOnce;
     });
 });
