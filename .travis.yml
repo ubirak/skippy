@@ -4,14 +4,10 @@ sudo: false
 
 node_js:
     # Current
-    - "6.1"
-    - "6.0"
-    - "5.9"
+    # - "6.9" # The current is the last LTS
     # LTS
+    - "6.9"
     - "4.4"
-    # Maintenance
-    - "0.12"
-    - "0.10"
 
 script:
     - npm test
