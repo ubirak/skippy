@@ -1,6 +1,6 @@
 {
   "name": "skippy",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Simple and robust dependency container.",
   "keywords": [
     "container",
