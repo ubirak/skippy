@@ -19,12 +19,9 @@ ObjectHelper.clone = function clone(object) {
  * @return {*}
  */
 ObjectHelper.createInstance = function createInstance(constructor, newInstanceArguments) {
-    // From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply#Using_apply_to_chain_constructors
-    var proxyConstructor = Object.create(constructor.prototype);
-
-    constructor.apply(proxyConstructor, newInstanceArguments);
-
-    return proxyConstructor;
+    // This solution come from babel.
+    // Try it here: http://babeljs.io/repl/#?babili=false&evaluate=true&lineWrap=false&presets=es2015&code=%0Aclass%20Bar%20%7B%0A%7D%0A%0Anew%20Bar(...%5B1%2C%202%5D)%3B
+    return new (Function.prototype.bind.apply(constructor, [null].concat(newInstanceArguments)))();
 };
 
 module.exports = ObjectHelper;
