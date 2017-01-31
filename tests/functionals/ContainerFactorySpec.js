@@ -7,6 +7,7 @@ var servicesConfigurationErroredWithCyclicDependencies = require('./../fixture/e
 var servicesConfigurationErroredWithUnknownDependencies = require('./../fixture/errored-with-unknown-dependencies/services');
 var servicesConfigurationErroredWithInvalidCalls = require('./../fixture/errored-with-invalid-calls/services');
 var ServiceA = require('./../fixture/valid/ServiceA');
+var ServiceThatDependOnTheContainer = require('./../fixture/valid/ServiceThatDependOnTheContainer');
 
 describe('ContainerFactory', function () {
     it('should return the parameter value', function () {
@@ -158,5 +159,12 @@ describe('ContainerFactory', function () {
         expect(function () {
             ContainerFactory.create(servicesConfigurationErroredWithInvalidCalls.services, servicesConfigurationErroredWithInvalidCalls.parameters);
         }).to.not.throw();
+    });
+
+    it('should inject itself as service dependency', function () {
+        var container = ContainerFactory.create(servicesConfigurationValid.services, servicesConfigurationValid.parameters);
+
+        var service = container.getService('foo.service.that.depend.on.the.container');
+        expect(service.getContainer()).to.be.equal(container);
     });
 });

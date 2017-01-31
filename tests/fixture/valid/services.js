@@ -46,6 +46,15 @@ module.exports = {
         {
             'name': 'foo.serviceE',
             'service': require('./ServiceE')
-        }
+        },
+
+        {
+            'name': 'foo.service.that.depend.on.the.container',
+            'service': require('./ServiceThatDependOnTheContainer'),
+            'arguments': [
+                '@container',
+            ],
+            'singleton': true
+        },
     ]
 };
