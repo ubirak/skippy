@@ -1,5 +1,7 @@
 'use strict';
 
+var CONTAINER_SERVICE_NAME = '@container';
+
 /**
  * @param {*} value
  * @constructor
@@ -41,6 +43,19 @@ FunctionArgument.prototype._isParameterReference = function _isParameterReferenc
  * @return {boolean}
  * @private
  */
+FunctionArgument.prototype._isContainerReference = function _isContainerReference(argumentValue) {
+    if (!this._isString(argumentValue)) {
+        return false;
+    }
+
+    return argumentValue === CONTAINER_SERVICE_NAME;
+};
+
+/**
+ * @param {*} argumentValue
+ * @return {boolean}
+ * @private
+ */
 FunctionArgument.prototype._isServiceReference = function _isServiceReference(argumentValue) {
     if (!this._isString(argumentValue)) {
         return false;
@@ -59,6 +74,8 @@ FunctionArgument.prototype._isServiceReference = function _isServiceReference(ar
 FunctionArgument.prototype._detectType = function _detectType(argumentValue) {
     if (this._isParameterReference(argumentValue)) {
         return FunctionArgument.TYPE_PARAMETER_REFERENCE;
+    } else if (this._isContainerReference(argumentValue)) {
+        return FunctionArgument.TYPE_CONTAINER_REFERENCE;
     } else if (this._isServiceReference(argumentValue)) {
         return FunctionArgument.TYPE_SERVICE_REFERENCE;
     }
@@ -123,7 +140,9 @@ FunctionArgument.prototype.isParameterReference = function isParameterReference(
  * @return {*}
  */
 FunctionArgument.prototype.resolve = function resolve(container) {
-    if (FunctionArgument.TYPE_PARAMETER_REFERENCE === this.type) {
+    if (FunctionArgument.TYPE_CONTAINER_REFERENCE === this.type) {
+        return container;
+    } else if (FunctionArgument.TYPE_PARAMETER_REFERENCE === this.type) {
         return container.getParameter(this._extractReferencedParameterName(this.name));
     } else if (FunctionArgument.TYPE_SERVICE_REFERENCE === this.type) {
         return container.getService(this._extractReferencedServiceName(this.name));
@@ -132,6 +151,7 @@ FunctionArgument.prototype.resolve = function resolve(container) {
     return this.name;
 };
 
+FunctionArgument.TYPE_CONTAINER_REFERENCE = 'container-reference';
 FunctionArgument.TYPE_PARAMETER_REFERENCE = 'parameter-reference';
 FunctionArgument.TYPE_SERVICE_REFERENCE = 'service-reference';
 FunctionArgument.TYPE_VALUE = 'simple-value';
