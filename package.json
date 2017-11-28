@@ -20,8 +20,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:rezzza/skippy.git"
+    "url": "https://github.com/ubirak/skippy.git"
   },
+  "bugs": {
+    "url": "https://github.com/ubirak/skippy/issues"
+  },
+  "homepage": "https://github.com/ubirak/skippy",
   "author": "Armand Abric <armand@forgebinaire.net>",
   "license": "MIT",
   "devDependencies": {
