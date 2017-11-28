@@ -4,15 +4,15 @@ sudo: false
 
 node_js:
     # Current
-    # - "6.9" # The current is the last LTS
+    - "9"
     # LTS
-    - "6.9"
-    - "4.4"
+    - "8"
+    - "6"
+    - "4"
 
 script:
     - yarn run test
     - yarn run lint
-    - yarn run coverage && yarn run coverage-upload
 
 notifications:
     email:
