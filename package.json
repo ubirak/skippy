@@ -13,25 +13,25 @@
   "main": "index.js",
   "scripts": {
     "bdd": "NODE_ENV=test mocha --colors --reporter=dot --watch --recursive tests",
-    "coverage": "NODE_ENV=test istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter=dot --recursive tests",
-    "coverage-upload": "NODE_ENV=test cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint --color .",
     "test": "NODE_ENV=test mocha --colors --reporter=dot --recursive tests"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:rezzza/skippy.git"
+    "url": "https://github.com/ubirak/skippy.git"
   },
+  "bugs": {
+    "url": "https://github.com/ubirak/skippy/issues"
+  },
+  "homepage": "https://github.com/ubirak/skippy",
   "author": "Armand Abric <armand@forgebinaire.net>",
   "license": "MIT",
   "devDependencies": {
-    "chai": "~3.5.0",
-    "coveralls": "^2.11.15",
+    "chai": "^3.5.0",
     "eslint": "^3.14.1",
-    "istanbul": "~0.4.2",
     "mocha": "^3.2.0",
     "sinon": "^1.17.7",
-    "sinon-chai": "~2.8.0"
+    "sinon-chai": "^2.8.0"
   },
   "dependencies": {
     "lodash": "^4.17.4"

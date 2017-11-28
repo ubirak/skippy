@@ -1,5 +1,0 @@
-reporting:
-    print: summary
-    reports:
-        - text
-    dir: ./coverage

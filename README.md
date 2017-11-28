@@ -1,8 +1,7 @@
 # Skippy
 
 [![npm](https://img.shields.io/npm/v/skippy.svg)](https://www.npmjs.com/package/skippy)
-[![Build Status](https://travis-ci.org/rezzza/skippy.svg?branch=master)](https://travis-ci.org/rezzza/skippy)
-[![Coverage Status](https://coveralls.io/repos/rezzza/skippy/badge.svg?branch=master&service=github)](https://coveralls.io/github/rezzza/skippy?branch=master)
+[![Build Status](https://travis-ci.org/ubirak/skippy.svg?branch=master)](https://travis-ci.org/ubirak/skippy)
 
 Skippy is designed to be an easy to use, robust, and well tested dependencies container. No magic inside.
 
