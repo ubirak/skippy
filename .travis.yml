@@ -3,20 +3,9 @@ language: node_js
 sudo: false
 
 node_js:
-    # Current
-    - "9"
-    # LTS
-    - "8"
-    - "6"
-    - "4"
+    - "node" # Current stable
+    - "lts/*" # Most recent LTS version
 
 script:
     - yarn run test
     - yarn run lint
-
-notifications:
-    email:
-        recipients:
-            - ci@verylastroom.com
-        on_success: change
-        on_failure: change
